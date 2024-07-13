@@ -1,5 +1,5 @@
 plugins {
-    id("java")
+    java
 }
 
 group = parent!!.group
@@ -15,6 +15,10 @@ dependencies {
     testImplementation(libs.assertj.core)
 
     testRuntimeOnly(libs.junit.platform.launcher)
+}
+
+tasks.compileJava {
+    options.compilerArgs.add("-Xlint:all")
 }
 
 tasks.test {

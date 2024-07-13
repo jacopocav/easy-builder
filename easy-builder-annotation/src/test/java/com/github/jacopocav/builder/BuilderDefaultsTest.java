@@ -1,6 +1,7 @@
 package com.github.jacopocav.builder;
 
-import com.github.jacopocav.builder.Builder.Defaults;
+import com.github.jacopocav.builder.annotation.Builder;
+import com.github.jacopocav.builder.annotation.Builder.Defaults;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;

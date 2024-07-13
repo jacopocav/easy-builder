@@ -1,4 +1,4 @@
-package com.github.jacopocav.builder;
+package com.github.jacopocav.builder.annotation;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
