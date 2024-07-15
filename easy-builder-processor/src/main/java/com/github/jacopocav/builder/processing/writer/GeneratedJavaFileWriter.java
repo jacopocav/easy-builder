@@ -1,10 +1,9 @@
 package com.github.jacopocav.builder.processing.writer;
 
 import com.github.jacopocav.builder.processing.generation.GeneratedJavaFile;
-
-import javax.annotation.processing.Filer;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import javax.annotation.processing.Filer;
 
 /**
  * Writes generated java sources to file.

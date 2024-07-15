@@ -1,5 +1,16 @@
 package com.github.jacopocav.builder.processor;
 
+import static com.github.jacopocav.builder.processing.error.AggregatedProcessingException.processingExceptions;
+import static com.github.jacopocav.builder.processing.error.ProcessingException.processingException;
+import static io.toolisticon.cute.Cute.unitTest;
+import static java.util.Objects.requireNonNullElse;
+import static java.util.stream.Collectors.toUnmodifiableMap;
+import static java.util.stream.Collectors.toUnmodifiableSet;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.*;
+import static org.mockito.Mockito.*;
+
 import com.github.jacopocav.builder.annotation.Builder;
 import com.github.jacopocav.builder.internal.option.BuilderOption;
 import com.github.jacopocav.builder.internal.option.OptionCompilerArgumentsValidator;
@@ -11,6 +22,16 @@ import com.github.jacopocav.builder.processing.writer.GeneratedJavaFileWriter;
 import com.github.jacopocav.builder.util.mock.ContextMock;
 import io.toolisticon.cute.PassIn;
 import io.toolisticon.cute.UnitTest;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import javax.annotation.processing.RoundEnvironment;
+import javax.lang.model.SourceVersion;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.TypeElement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,28 +41,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.co.jemos.podam.api.PodamFactory;
 import uk.co.jemos.podam.api.PodamFactoryImpl;
-
-import javax.annotation.processing.RoundEnvironment;
-import javax.lang.model.SourceVersion;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.TypeElement;
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import static com.github.jacopocav.builder.processing.error.AggregatedProcessingException.processingExceptions;
-import static com.github.jacopocav.builder.processing.error.ProcessingException.processingException;
-import static io.toolisticon.cute.Cute.unitTest;
-import static java.util.Objects.requireNonNullElse;
-import static java.util.stream.Collectors.toUnmodifiableMap;
-import static java.util.stream.Collectors.toUnmodifiableSet;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.*;
-import static org.mockito.Mockito.*;
 
 @ExtendWith({MockitoExtension.class})
 class BuilderProcessorTest {

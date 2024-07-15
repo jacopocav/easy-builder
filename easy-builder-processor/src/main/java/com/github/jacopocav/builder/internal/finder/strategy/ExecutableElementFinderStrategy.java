@@ -1,11 +1,10 @@
 package com.github.jacopocav.builder.internal.finder.strategy;
 
-import com.github.jacopocav.builder.internal.finder.strategy.CreatorMethod.Found;
+import static com.github.jacopocav.builder.internal.finder.strategy.CreatorMethod.Error.NOT_APPLICABLE;
 
+import com.github.jacopocav.builder.internal.finder.strategy.CreatorMethod.Found;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
-
-import static com.github.jacopocav.builder.internal.finder.strategy.CreatorMethod.Error.NOT_APPLICABLE;
 
 class ExecutableElementFinderStrategy implements CreatorMethodFinderStrategy {
     /**

@@ -1,17 +1,16 @@
 package com.github.jacopocav.builder.compile;
 
-import com.github.jacopocav.builder.util.BuilderAssert;
-import com.github.jacopocav.builder.util.SourceUtils;
 import com.github.jacopocav.builder.processor.BuilderProcessor;
+import com.github.jacopocav.builder.util.BuilderAssert;
 import com.github.jacopocav.builder.util.GenericType;
+import com.github.jacopocav.builder.util.SourceUtils;
 import io.toolisticon.cute.Cute;
 import io.toolisticon.cute.CuteApi.BlackBoxTestSourceFilesInterface;
+import java.lang.reflect.Type;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-
-import java.lang.reflect.Type;
-import java.util.List;
 
 class BuilderOptionsCompileTest {
     private static final String packageName = "org.example";
@@ -39,9 +38,9 @@ class BuilderOptionsCompileTest {
 
         sut.andSourceFile(recordQualifiedName, source)
                 .andUseCompilerOptions(
-                        "-Abuilder.setterPrefix=set",
-                        "-Abuilder.factoryMethodName=giveMeNewBuilder",
-                        "-Abuilder.buildMethodName=construct")
+                        "-Aeasy.builder.setterPrefix=set",
+                        "-Aeasy.builder.factoryMethodName=giveMeNewBuilder",
+                        "-Aeasy.builder.buildMethodName=construct")
                 .whenCompiled()
                 .thenExpectThat()
                 .compilationSucceeds()
@@ -69,9 +68,9 @@ class BuilderOptionsCompileTest {
 
     @ParameterizedTest
     @CsvSource({
-        "builder.setterPrefix,invalid-setter-prefix",
-        "builder.factoryMethodName,enum",
-        "builder.buildMethodName,1buildMeThis",
+        "easy.builder.setterPrefix,invalid-setter-prefix",
+        "easy.builder.factoryMethodName,enum",
+        "easy.builder.buildMethodName,1buildMeThis",
     })
     void shouldNotCompileGivenInvalidCompilerOption(String optionName, String optionValue) {
         // language=Java

@@ -1,12 +1,11 @@
 package com.github.jacopocav.builder.annotation;
 
-import com.github.jacopocav.builder.annotation.Builder.CopyFactoryMethodGeneration;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import com.github.jacopocav.builder.annotation.Builder.CopyFactoryMethodGeneration;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
 /**
  * Effective options used for the annotated generated builder class

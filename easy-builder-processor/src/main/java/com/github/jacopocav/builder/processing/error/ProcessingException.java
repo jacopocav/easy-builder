@@ -1,7 +1,7 @@
 package com.github.jacopocav.builder.processing.error;
 
-import javax.lang.model.element.Element;
 import java.io.Serial;
+import javax.lang.model.element.Element;
 
 /**
  * An error that occurred during annotation processing

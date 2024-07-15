@@ -1,6 +1,5 @@
 package com.github.jacopocav.builder.internal.template;
 
-
 /**
  * Variables related to a single builder "member" (i.e. property)
  */

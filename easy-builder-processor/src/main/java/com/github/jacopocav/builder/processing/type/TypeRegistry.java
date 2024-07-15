@@ -1,9 +1,9 @@
 package com.github.jacopocav.builder.processing.type;
 
-import javax.lang.model.element.TypeElement;
-import javax.lang.model.type.TypeMirror;
 import java.lang.reflect.Type;
 import java.util.Collection;
+import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.TypeMirror;
 
 /**
  * Keeps track of all types directly referenced in a generated java file

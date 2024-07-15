@@ -1,8 +1,8 @@
 package com.github.jacopocav.builder.internal.util;
 
-import javax.lang.model.element.ElementKind;
 import java.util.List;
 import java.util.Set;
+import javax.lang.model.element.ElementKind;
 
 public class MultiReleaseUtils {
     private MultiReleaseUtils() {}

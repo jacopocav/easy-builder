@@ -1,11 +1,11 @@
 package com.github.jacopocav.builder.util;
 
+import static java.util.Objects.hash;
+
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Objects;
-
-import static java.util.Objects.hash;
 
 /**
  * Represents a <em>reified</em> generic type T.
@@ -58,8 +58,8 @@ public abstract class GenericType<T> {
     @Override
     public boolean equals(Object other) {
         return other instanceof GenericType<?> that
-               && Objects.equals(genericType, that.genericType)
-               && Objects.equals(rawClass, that.rawClass);
+                && Objects.equals(genericType, that.genericType)
+                && Objects.equals(rawClass, that.rawClass);
     }
 
     @Override

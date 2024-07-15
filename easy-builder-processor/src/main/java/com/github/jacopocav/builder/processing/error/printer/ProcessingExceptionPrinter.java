@@ -1,13 +1,11 @@
 package com.github.jacopocav.builder.processing.error.printer;
 
-import com.github.jacopocav.builder.internal.finder.strategy.CreatorMethod.Error;
 import com.github.jacopocav.builder.processing.error.AggregatedProcessingException;
 import com.github.jacopocav.builder.processing.error.ProcessingException;
-
-import javax.annotation.processing.Messager;
-import javax.tools.Diagnostic.Kind;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import javax.annotation.processing.Messager;
+import javax.tools.Diagnostic.Kind;
 
 /**
  * Prints {@link ProcessingException} and {@link AggregatedProcessingException} as errors

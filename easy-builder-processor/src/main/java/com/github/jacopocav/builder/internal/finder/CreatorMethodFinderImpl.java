@@ -1,18 +1,17 @@
 package com.github.jacopocav.builder.internal.finder;
 
-import com.github.jacopocav.builder.internal.finder.strategy.CreatorMethod.Error;
-import com.github.jacopocav.builder.internal.finder.strategy.CreatorMethod.Found;
-import com.github.jacopocav.builder.internal.finder.strategy.CreatorMethodFinderStrategy;
-
-import javax.lang.model.element.Element;
-import javax.lang.model.element.ExecutableElement;
-import java.util.Collection;
-import java.util.List;
-
 import static com.github.jacopocav.builder.internal.finder.strategy.CreatorMethod.Error.NOT_APPLICABLE;
 import static com.github.jacopocav.builder.processing.error.ProcessingException.processingException;
 import static java.util.function.Predicate.isEqual;
 import static java.util.function.Predicate.not;
+
+import com.github.jacopocav.builder.internal.finder.strategy.CreatorMethod.Error;
+import com.github.jacopocav.builder.internal.finder.strategy.CreatorMethod.Found;
+import com.github.jacopocav.builder.internal.finder.strategy.CreatorMethodFinderStrategy;
+import java.util.Collection;
+import java.util.List;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.ExecutableElement;
 
 public class CreatorMethodFinderImpl implements CreatorMethodFinder {
     private final List<? extends CreatorMethodFinderStrategy> strategies;

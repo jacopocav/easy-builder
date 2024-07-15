@@ -1,5 +1,4 @@
 import com.github.jacopocav.builder.processor.BuilderProcessor;
-
 import javax.annotation.processing.Processor;
 
 module com.github.jacopocav.easybuilder.processor {
@@ -7,7 +6,6 @@ module com.github.jacopocav.easybuilder.processor {
     requires java.compiler;
     requires gg.jte.runtime;
     requires gg.jte.models;
-    requires com.fasterxml.jackson.databind;
 
     provides Processor with
             BuilderProcessor;

@@ -1,23 +1,5 @@
 package com.github.jacopocav.builder.util;
 
-import com.github.jacopocav.builder.annotation.Builder.CopyFactoryMethodGeneration;
-import com.github.jacopocav.builder.annotation.Builder.Defaults;
-import com.github.jacopocav.builder.annotation.GeneratedBuilder;
-import com.github.jacopocav.builder.internal.option.BuilderOption;
-import com.github.jacopocav.builder.processing.generation.name.NameTemplateInterpolator;
-import org.assertj.core.api.Assertions;
-import org.assertj.core.api.recursive.comparison.RecursiveComparisonConfiguration;
-import uk.co.jemos.podam.api.PodamFactory;
-import uk.co.jemos.podam.api.PodamFactoryImpl;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-
 import static com.github.jacopocav.builder.internal.util.StringUtils.composeSetterName;
 import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNullElse;
@@ -26,6 +8,23 @@ import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toUnmodifiableMap;
 import static javax.lang.model.element.Modifier.*;
 import static org.junit.jupiter.api.Assertions.fail;
+
+import com.github.jacopocav.builder.annotation.Builder.CopyFactoryMethodGeneration;
+import com.github.jacopocav.builder.annotation.Builder.Defaults;
+import com.github.jacopocav.builder.annotation.GeneratedBuilder;
+import com.github.jacopocav.builder.internal.option.BuilderOption;
+import com.github.jacopocav.builder.processing.generation.name.NameTemplateInterpolator;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+import org.assertj.core.api.Assertions;
+import org.assertj.core.api.recursive.comparison.RecursiveComparisonConfiguration;
+import uk.co.jemos.podam.api.PodamFactory;
+import uk.co.jemos.podam.api.PodamFactoryImpl;
 
 /**
  * Assert class for generated builder classes.
@@ -135,7 +134,8 @@ public class BuilderAssert extends AbstractRichClassAssert<BuilderAssert> {
             hasDeclaredMethod(
                     Set.of(PUBLIC, STATIC),
                     actual,
-                    interpolator.interpolate(copyFactoryMethodName, targetClass), targetClass);
+                    interpolator.interpolate(copyFactoryMethodName, targetClass),
+                    targetClass);
         }
 
         Assertions.assertThat(properties).allSatisfy(property -> {

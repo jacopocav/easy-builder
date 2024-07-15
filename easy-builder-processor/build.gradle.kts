@@ -1,7 +1,6 @@
 import gg.jte.ContentType
 
 plugins {
-    java
     alias(libs.plugins.jte.gradle.plugin)
 }
 
@@ -14,7 +13,6 @@ repositories {
 
 dependencies {
     implementation(project(":easy-builder-annotation"))
-    implementation(libs.palantir)
     implementation(libs.jte.runtime)
 
     jteGenerate(libs.jte.models)
@@ -41,6 +39,10 @@ jte {
     contentType = ContentType.Plain
     trimControlStructures = true
     packageName = "com.github.jacopocav.builder.internal.template.jte"
+}
+
+tasks.spotlessJava {
+    dependsOn(tasks.generateJte)
 }
 
 tasks.compileJava {

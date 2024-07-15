@@ -1,19 +1,18 @@
 package com.github.jacopocav.builder.internal.validation;
 
+import static com.github.jacopocav.builder.processing.error.ProcessingException.processingException;
+import static java.util.stream.Collectors.toMap;
+
+import com.github.jacopocav.builder.annotation.Builder;
 import com.github.jacopocav.builder.internal.option.BuilderOption;
 import com.github.jacopocav.builder.processing.error.ProcessingException;
 import com.github.jacopocav.builder.processing.validation.JavaNameValidator;
 import com.github.jacopocav.builder.processing.validation.rule.ValidationRule;
-import com.github.jacopocav.builder.annotation.Builder;
-
-import javax.lang.model.element.Element;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import static com.github.jacopocav.builder.processing.error.ProcessingException.processingException;
-import static java.util.stream.Collectors.toMap;
+import javax.lang.model.element.Element;
 
 /**
  * Ensures that the {@code element} annotated with

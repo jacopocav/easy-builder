@@ -1,17 +1,16 @@
 package com.github.jacopocav.builder.internal.option;
 
+import static java.util.stream.Collectors.toMap;
+
 import com.github.jacopocav.builder.annotation.Builder;
 import com.github.jacopocav.builder.annotation.Builder.CopyFactoryMethodGeneration;
 import com.github.jacopocav.builder.processing.generation.name.NameTemplateInterpolator;
-
+import java.util.Map;
+import java.util.Optional;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Name;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
-import java.util.Map;
-import java.util.Optional;
-
-import static java.util.stream.Collectors.toMap;
 
 public class OptionsRepositoryImpl implements OptionsRepository {
     private final RawOptions defaults;

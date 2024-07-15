@@ -1,7 +1,6 @@
 package com.github.jacopocav.builder.internal.option;
 
 import com.github.jacopocav.builder.processing.error.ProcessingException;
-
 import java.util.Collection;
 import java.util.Map;
 

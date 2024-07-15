@@ -6,7 +6,6 @@ import com.github.jacopocav.builder.internal.option.OptionsRepository;
 import com.github.jacopocav.builder.internal.option.RawOptions;
 import com.github.jacopocav.builder.processing.generation.GeneratedJavaFile;
 import com.github.jacopocav.builder.processing.generation.name.GeneratedTypeNameGenerator;
-
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 

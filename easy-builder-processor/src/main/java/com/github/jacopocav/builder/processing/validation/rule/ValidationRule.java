@@ -1,10 +1,9 @@
 package com.github.jacopocav.builder.processing.validation.rule;
 
-import com.github.jacopocav.builder.processing.validation.ElementValidator;
 import com.github.jacopocav.builder.processing.error.ProcessingException;
-
-import javax.lang.model.element.Element;
+import com.github.jacopocav.builder.processing.validation.ElementValidator;
 import java.util.Collection;
+import javax.lang.model.element.Element;
 
 /**
  * A validation rule used by {@link  ElementValidator}

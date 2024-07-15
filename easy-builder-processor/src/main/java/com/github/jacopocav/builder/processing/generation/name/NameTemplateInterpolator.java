@@ -1,17 +1,16 @@
 package com.github.jacopocav.builder.processing.generation.name;
 
-import com.github.jacopocav.builder.annotation.Builder;
-
-import javax.lang.model.element.Element;
-import javax.lang.model.element.TypeElement;
-import java.util.Comparator;
-import java.util.Objects;
-import java.util.stream.Stream;
-
 import static com.github.jacopocav.builder.internal.util.MultiReleaseUtils.isDeclaredType;
 import static com.github.jacopocav.builder.internal.util.StringUtils.decapitalize;
 import static java.util.stream.Collectors.joining;
 import static javax.lang.model.element.NestingKind.TOP_LEVEL;
+
+import com.github.jacopocav.builder.annotation.Builder;
+import java.util.Comparator;
+import java.util.Objects;
+import java.util.stream.Stream;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.TypeElement;
 
 public class NameTemplateInterpolator {
     public String interpolate(String template, Class<?> targetClass) {

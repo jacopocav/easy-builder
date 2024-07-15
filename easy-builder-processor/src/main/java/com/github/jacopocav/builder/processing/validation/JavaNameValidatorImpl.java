@@ -1,7 +1,6 @@
 package com.github.jacopocav.builder.processing.validation;
 
 import com.github.jacopocav.builder.processing.generation.name.NameTemplateInterpolator;
-
 import javax.lang.model.SourceVersion;
 
 public class JavaNameValidatorImpl implements JavaNameValidator {
@@ -18,7 +17,6 @@ public class JavaNameValidatorImpl implements JavaNameValidator {
 
     @Override
     public boolean isValidNamePrefix(String value) {
-        return value.isEmpty()
-                || SourceVersion.isIdentifier(nameTemplateInterpolator.interpolate(value, Object.class));
+        return value.isEmpty() || SourceVersion.isIdentifier(nameTemplateInterpolator.interpolate(value, Object.class));
     }
 }

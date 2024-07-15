@@ -12,7 +12,8 @@ public record RawOptions(
         String buildMethodName,
         String staticFactoryName,
         CopyFactoryMethodGeneration copyFactoryMethod,
-        String copyFactoryMethodName) implements Options {
+        String copyFactoryMethodName)
+        implements Options {
 
     public static Builder builder() {
         return new Builder();

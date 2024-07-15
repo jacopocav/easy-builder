@@ -1,21 +1,20 @@
 package com.github.jacopocav.builder.compile;
 
+import static org.junit.jupiter.params.provider.Arguments.arguments;
+
+import com.github.jacopocav.builder.processor.BuilderProcessor;
 import com.github.jacopocav.builder.util.BuilderAssert;
 import com.github.jacopocav.builder.util.GenericType;
 import com.github.jacopocav.builder.util.SourceUtils;
-import com.github.jacopocav.builder.processor.BuilderProcessor;
 import io.toolisticon.cute.Cute;
 import io.toolisticon.cute.CuteApi.BlackBoxTestSourceFilesInterface;
+import java.lang.reflect.Type;
+import java.util.List;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-
-import java.lang.reflect.Type;
-import java.util.List;
-import java.util.stream.Stream;
-
-import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 class AnnotatedConstructorCompileTest {
     private static final String packageName = "org.example";

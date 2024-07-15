@@ -1,15 +1,14 @@
 package com.github.jacopocav.builder.internal.validation;
 
+import static javax.lang.model.element.ElementKind.*;
+
 import com.github.jacopocav.builder.processing.validation.JavaNameValidator;
 import com.github.jacopocav.builder.processing.validation.rule.ElementKindValidationRule;
 import com.github.jacopocav.builder.processing.validation.rule.SamePackageAccessValidationRule;
 import com.github.jacopocav.builder.processing.validation.rule.ValidationRule;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-
-import static javax.lang.model.element.ElementKind.*;
 
 public class ValidationRules {
     private ValidationRules() {}

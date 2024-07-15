@@ -2,10 +2,9 @@ package com.github.jacopocav.builder.processing.validation;
 
 import com.github.jacopocav.builder.processing.error.AggregatedProcessingException;
 import com.github.jacopocav.builder.processing.validation.rule.ValidationRule;
-
-import javax.lang.model.element.Element;
 import java.util.Collection;
 import java.util.List;
+import javax.lang.model.element.Element;
 
 public class ElementValidatorImpl implements ElementValidator {
     private final List<? extends ValidationRule> rules;

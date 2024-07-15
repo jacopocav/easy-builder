@@ -1,22 +1,21 @@
 package com.github.jacopocav.builder.compile;
 
-import com.github.jacopocav.builder.util.BuilderAssert;
-import com.github.jacopocav.builder.util.SourceUtils;
+import static io.toolisticon.cute.JavaFileObjectUtils.readFromString;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
+
 import com.github.jacopocav.builder.processor.BuilderProcessor;
+import com.github.jacopocav.builder.util.BuilderAssert;
 import com.github.jacopocav.builder.util.GenericType;
+import com.github.jacopocav.builder.util.SourceUtils;
 import io.toolisticon.cute.Cute;
 import io.toolisticon.cute.CuteApi.BlackBoxTestSourceFilesInterface;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
-
-import javax.tools.JavaFileObject;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.stream.Stream;
-
-import static io.toolisticon.cute.JavaFileObjectUtils.readFromString;
-import static org.junit.jupiter.params.provider.Arguments.arguments;
+import javax.tools.JavaFileObject;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 class AnnotatedStaticMethodCompileTest {
     public static final String anotherPackage = "org.another.pkg";

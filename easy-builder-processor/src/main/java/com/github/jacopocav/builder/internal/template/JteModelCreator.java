@@ -1,17 +1,16 @@
 package com.github.jacopocav.builder.internal.template;
 
+import static javax.lang.model.element.ElementKind.METHOD;
+
 import com.github.jacopocav.builder.annotation.Builder.CopyFactoryMethodGeneration;
 import com.github.jacopocav.builder.annotation.GeneratedBuilder;
 import com.github.jacopocav.builder.internal.template.jte.Templates;
 import com.github.jacopocav.builder.processing.type.TypeRegistryFactory;
 import com.github.jacopocav.builder.processor.BuilderProcessor;
 import gg.jte.models.runtime.JteModel;
-
 import java.time.Clock;
 import java.time.OffsetDateTime;
 import java.util.Objects;
-
-import static javax.lang.model.element.ElementKind.METHOD;
 
 /**
  * Creates a {@link JteModel} of the builder class, ready to be rendered with {@link JteModel#render()}
@@ -54,11 +53,12 @@ public class JteModelCreator {
         var staticCreatorMethod = creatorMethod.getKind() == METHOD
                 ? creatorMethod.getSimpleName().toString()
                 : "";
-        var generateCopyFactoryMethod = switch (options.copyFactoryMethod()) {
-            case DISABLED -> false;
-            case ENABLED -> true;
-            case DYNAMIC -> members.stream().map(Member::getterName).allMatch(Objects::nonNull);
-        };
+        var generateCopyFactoryMethod =
+                switch (options.copyFactoryMethod()) {
+                    case DISABLED -> false;
+                    case ENABLED -> true;
+                    case DYNAMIC -> members.stream().map(Member::getterName).allMatch(Objects::nonNull);
+                };
 
         typeRegistry.register(GeneratedBuilder.class);
         typeRegistry.register(CopyFactoryMethodGeneration.class);

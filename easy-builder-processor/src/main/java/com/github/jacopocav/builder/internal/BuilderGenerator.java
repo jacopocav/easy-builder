@@ -2,8 +2,6 @@ package com.github.jacopocav.builder.internal;
 
 import com.github.jacopocav.builder.internal.option.RawOptions;
 import com.github.jacopocav.builder.processing.generation.GeneratedJavaFile;
-
-import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 
 public interface BuilderGenerator {

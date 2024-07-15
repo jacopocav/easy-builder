@@ -1,24 +1,21 @@
 package com.github.jacopocav.builder.internal.template;
 
-import com.github.jacopocav.builder.internal.finder.Accessor.Found;
-import com.github.jacopocav.builder.internal.finder.Accessor.NotFound;
-import com.github.jacopocav.builder.internal.finder.AccessorFinder;
-import com.github.jacopocav.builder.internal.option.BuilderOption;
-import com.github.jacopocav.builder.internal.option.InterpolatedOptions;
-import com.github.jacopocav.builder.internal.option.Options;
-import com.github.jacopocav.builder.internal.option.RawOptions;
-import com.github.jacopocav.builder.internal.util.StringUtils;
-import com.github.jacopocav.builder.processing.error.ProcessingException;
-import com.github.jacopocav.builder.processing.type.TypeRegistry;
-
-import javax.lang.model.element.VariableElement;
-import java.util.List;
-
 import static com.github.jacopocav.builder.annotation.Builder.CopyFactoryMethodGeneration.*;
 import static com.github.jacopocav.builder.processing.error.AggregatedProcessingException.processingExceptions;
 import static com.github.jacopocav.builder.processing.error.ProcessingException.processingException;
 import static java.util.stream.Collectors.partitioningBy;
 import static javax.lang.model.element.ElementKind.METHOD;
+
+import com.github.jacopocav.builder.internal.finder.Accessor.Found;
+import com.github.jacopocav.builder.internal.finder.Accessor.NotFound;
+import com.github.jacopocav.builder.internal.finder.AccessorFinder;
+import com.github.jacopocav.builder.internal.option.BuilderOption;
+import com.github.jacopocav.builder.internal.option.InterpolatedOptions;
+import com.github.jacopocav.builder.internal.util.StringUtils;
+import com.github.jacopocav.builder.processing.error.ProcessingException;
+import com.github.jacopocav.builder.processing.type.TypeRegistry;
+import java.util.List;
+import javax.lang.model.element.VariableElement;
 
 public class MembersGenerator {
     private final AccessorFinder accessorFinder;
@@ -43,7 +40,10 @@ public class MembersGenerator {
 
         requireEmpty(failures);
 
-        return successes.stream().map(MemberResult.Success.class::cast).map(MemberResult.Success::member).toList();
+        return successes.stream()
+                .map(MemberResult.Success.class::cast)
+                .map(MemberResult.Success::member)
+                .toList();
     }
 
     private MemberResult toMember(VariableElement parameter, TypeRegistry typeRegistry, InterpolatedOptions options) {
@@ -70,8 +70,10 @@ public class MembersGenerator {
                                     "could not find any accessor (getter or field) for parameter %s. "
                                             + "Add it or disable static copy method generation with %s=%s or %s=%s",
                                     parameter.getSimpleName(),
-                                    BuilderOption.COPY_FACTORY_METHOD.annotationName(), DISABLED,
-                                    BuilderOption.COPY_FACTORY_METHOD.annotationName(), DYNAMIC))
+                                    BuilderOption.COPY_FACTORY_METHOD.annotationName(),
+                                    DISABLED,
+                                    BuilderOption.COPY_FACTORY_METHOD.annotationName(),
+                                    DYNAMIC))
                     : new MemberResult.Success(memberBuilder.build());
         }
 
@@ -96,6 +98,7 @@ public class MembersGenerator {
 
     private sealed interface MemberResult {
         record Failure(VariableElement parameter, ProcessingException exception) implements MemberResult {}
+
         record Success(Member member) implements MemberResult {}
     }
 }

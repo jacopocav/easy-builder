@@ -1,19 +1,18 @@
 package com.github.jacopocav.builder.internal.finder;
 
-import com.github.jacopocav.builder.internal.util.StringUtils;
-import com.github.jacopocav.builder.internal.TargetClassRetriever;
-
-import javax.lang.model.element.*;
-import javax.lang.model.util.Elements;
-import javax.lang.model.util.Types;
-import java.util.Optional;
-import java.util.function.Function;
-
 import static javax.lang.model.element.Modifier.*;
 import static javax.lang.model.type.TypeKind.BOOLEAN;
 import static javax.lang.model.type.TypeKind.NONE;
 import static javax.lang.model.util.ElementFilter.fieldsIn;
 import static javax.lang.model.util.ElementFilter.methodsIn;
+
+import com.github.jacopocav.builder.internal.TargetClassRetriever;
+import com.github.jacopocav.builder.internal.util.StringUtils;
+import java.util.Optional;
+import java.util.function.Function;
+import javax.lang.model.element.*;
+import javax.lang.model.util.Elements;
+import javax.lang.model.util.Types;
 
 public class AccessorFinder implements Function<VariableElement, Accessor> {
     private final Types types;

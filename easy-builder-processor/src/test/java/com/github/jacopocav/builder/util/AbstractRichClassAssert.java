@@ -1,18 +1,17 @@
 package com.github.jacopocav.builder.util;
 
-import org.assertj.core.api.AbstractClassAssert;
-import org.assertj.core.api.Assertions;
-
-import javax.lang.model.element.Modifier;
-import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Set;
-
 import static java.util.Comparator.naturalOrder;
 import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toUnmodifiableSet;
+
+import java.lang.reflect.Type;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Set;
+import javax.lang.model.element.Modifier;
+import org.assertj.core.api.AbstractClassAssert;
+import org.assertj.core.api.Assertions;
 
 public abstract class AbstractRichClassAssert<SELF extends AbstractRichClassAssert<SELF>>
         extends AbstractClassAssert<SELF> {

@@ -1,7 +1,6 @@
 package com.github.jacopocav.builder.internal.finder.strategy;
 
 import com.github.jacopocav.builder.internal.finder.CreatorMethodFinder;
-
 import javax.lang.model.element.Element;
 
 /**

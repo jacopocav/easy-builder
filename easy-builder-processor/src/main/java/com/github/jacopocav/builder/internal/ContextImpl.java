@@ -8,7 +8,12 @@ import com.github.jacopocav.builder.internal.option.OptionCompilerArgumentsValid
 import com.github.jacopocav.builder.internal.option.OptionCompilerArgumentsValidatorImpl;
 import com.github.jacopocav.builder.internal.option.OptionsRepository;
 import com.github.jacopocav.builder.internal.option.OptionsRepositoryImpl;
+import com.github.jacopocav.builder.internal.template.BuilderGeneratorJte;
 import com.github.jacopocav.builder.internal.template.JteModelCreator;
+import com.github.jacopocav.builder.internal.template.MembersGenerator;
+import com.github.jacopocav.builder.internal.template.MetadataAnnotationsGenerator;
+import com.github.jacopocav.builder.internal.template.jte.StaticTemplates;
+import com.github.jacopocav.builder.internal.validation.ValidationRules;
 import com.github.jacopocav.builder.processing.error.printer.ProcessingExceptionPrinter;
 import com.github.jacopocav.builder.processing.generation.SingleElementJavaFileGenerator;
 import com.github.jacopocav.builder.processing.generation.name.GeneratedTypeNameGeneratorImpl;
@@ -18,14 +23,8 @@ import com.github.jacopocav.builder.processing.validation.ElementValidator;
 import com.github.jacopocav.builder.processing.validation.ElementValidatorImpl;
 import com.github.jacopocav.builder.processing.validation.JavaNameValidatorImpl;
 import com.github.jacopocav.builder.processing.writer.GeneratedJavaFileWriter;
-import com.github.jacopocav.builder.internal.template.BuilderGeneratorJte;
-import com.github.jacopocav.builder.internal.template.MembersGenerator;
-import com.github.jacopocav.builder.internal.template.MetadataAnnotationsGenerator;
-import com.github.jacopocav.builder.internal.template.jte.StaticTemplates;
-import com.github.jacopocav.builder.internal.validation.ValidationRules;
-
-import javax.annotation.processing.ProcessingEnvironment;
 import java.time.Clock;
+import javax.annotation.processing.ProcessingEnvironment;
 
 class ContextImpl implements Context {
     private final ElementValidator elementValidator;
@@ -64,7 +63,8 @@ class ContextImpl implements Context {
 
     @Override
     public SingleElementJavaFileGenerator singleBuilderJavaFileGenerator() {
-        return new SingleBuilderJavaFileGenerator(elementValidator, creatorMethodFinder, optionsRepository, builderGenerator);
+        return new SingleBuilderJavaFileGenerator(
+                elementValidator, creatorMethodFinder, optionsRepository, builderGenerator);
     }
 
     @Override

@@ -3,7 +3,6 @@ package com.github.jacopocav.builder.internal.template;
 import com.github.jacopocav.builder.annotation.Builder.CopyFactoryMethodGeneration;
 import com.github.jacopocav.builder.internal.option.BuilderOption;
 import com.github.jacopocav.builder.internal.option.RawOptions;
-
 import java.util.List;
 
 public class MetadataAnnotationsGenerator {

@@ -3,7 +3,6 @@ package com.github.jacopocav.builder.internal.option;
 import com.github.jacopocav.builder.annotation.Builder;
 import com.github.jacopocav.builder.annotation.Builder.Defaults;
 import com.github.jacopocav.builder.processor.BuilderProcessor;
-
 import java.util.Optional;
 import java.util.Set;
 
@@ -54,7 +53,7 @@ public enum BuilderOption {
      * The name of the option when received as a compiler argument (as {@code -AcompilerName=value})
      */
     public String compilerName() {
-        return "builder." + annotationName();
+        return "easy.builder." + annotationName();
     }
 
     @SuppressWarnings("unchecked")

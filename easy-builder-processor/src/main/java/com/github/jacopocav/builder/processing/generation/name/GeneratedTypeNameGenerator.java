@@ -4,5 +4,4 @@ import javax.lang.model.element.Element;
 
 public interface GeneratedTypeNameGenerator {
     GeneratedTypeName generate(Element samePackageElement, String simpleNameOverride);
-
 }

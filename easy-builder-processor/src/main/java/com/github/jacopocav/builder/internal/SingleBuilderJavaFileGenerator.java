@@ -5,7 +5,6 @@ import com.github.jacopocav.builder.internal.option.OptionsRepository;
 import com.github.jacopocav.builder.processing.generation.GeneratedJavaFile;
 import com.github.jacopocav.builder.processing.generation.SingleElementJavaFileGenerator;
 import com.github.jacopocav.builder.processing.validation.ElementValidator;
-
 import javax.lang.model.element.Element;
 
 class SingleBuilderJavaFileGenerator implements SingleElementJavaFileGenerator {
@@ -16,7 +15,8 @@ class SingleBuilderJavaFileGenerator implements SingleElementJavaFileGenerator {
 
     SingleBuilderJavaFileGenerator(
             ElementValidator elementValidator,
-            CreatorMethodFinder creatorMethodFinder, OptionsRepository optionsRepository,
+            CreatorMethodFinder creatorMethodFinder,
+            OptionsRepository optionsRepository,
             BuilderGenerator generator) {
 
         this.elementValidator = elementValidator;

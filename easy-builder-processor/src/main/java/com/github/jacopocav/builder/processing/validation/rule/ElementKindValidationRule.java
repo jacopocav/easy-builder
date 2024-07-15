@@ -1,13 +1,12 @@
 package com.github.jacopocav.builder.processing.validation.rule;
 
-import com.github.jacopocav.builder.processing.error.ProcessingException;
+import static com.github.jacopocav.builder.processing.error.ProcessingException.processingException;
 
-import javax.lang.model.element.Element;
-import javax.lang.model.element.ElementKind;
+import com.github.jacopocav.builder.processing.error.ProcessingException;
 import java.util.List;
 import java.util.Set;
-
-import static com.github.jacopocav.builder.processing.error.ProcessingException.processingException;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementKind;
 
 /**
  * Ensures that the annotated element is of the expected kind(s)

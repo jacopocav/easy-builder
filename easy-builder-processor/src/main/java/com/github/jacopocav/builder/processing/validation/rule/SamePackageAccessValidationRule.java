@@ -1,16 +1,15 @@
 package com.github.jacopocav.builder.processing.validation.rule;
 
-import com.github.jacopocav.builder.processing.error.ProcessingException;
+import static com.github.jacopocav.builder.processing.error.ProcessingException.processingException;
+import static javax.lang.model.element.ElementKind.PACKAGE;
+import static javax.lang.model.element.Modifier.PRIVATE;
 
-import javax.lang.model.element.Element;
+import com.github.jacopocav.builder.processing.error.ProcessingException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
-
-import static com.github.jacopocav.builder.processing.error.ProcessingException.processingException;
-import static javax.lang.model.element.ElementKind.PACKAGE;
-import static javax.lang.model.element.Modifier.PRIVATE;
+import javax.lang.model.element.Element;
 
 /**
  * Ensures that {@code element} is accessible anywhere within the same package

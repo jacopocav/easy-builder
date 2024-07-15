@@ -1,11 +1,11 @@
 package com.github.jacopocav.builder.processing.type;
 
+import static javax.lang.model.element.ElementKind.ANNOTATION_TYPE;
+import static javax.lang.model.element.ElementKind.ENUM;
+
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
-
-import static javax.lang.model.element.ElementKind.ANNOTATION_TYPE;
-import static javax.lang.model.element.ElementKind.ENUM;
 
 /**
  * Contains all kinds of values an annotation member can have (primitives, class literals, enum constants, strings,

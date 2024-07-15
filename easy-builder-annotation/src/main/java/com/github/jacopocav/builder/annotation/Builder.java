@@ -1,10 +1,10 @@
 package com.github.jacopocav.builder.annotation;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
 @Retention(SOURCE)
 @Target({TYPE, CONSTRUCTOR, METHOD})
@@ -87,8 +87,7 @@ public @interface Builder {
         public static final String FACTORY_METHOD_NAME = "create";
         public static final String SETTER_PREFIX = "";
         public static final String BUILD_METHOD_NAME = "build";
-        public static final CopyFactoryMethodGeneration COPY_FACTORY_METHOD =
-                CopyFactoryMethodGeneration.ENABLED;
+        public static final CopyFactoryMethodGeneration COPY_FACTORY_METHOD = CopyFactoryMethodGeneration.ENABLED;
         public static final String COPY_FACTORY_METHOD_NAME = "from";
     }
 }
