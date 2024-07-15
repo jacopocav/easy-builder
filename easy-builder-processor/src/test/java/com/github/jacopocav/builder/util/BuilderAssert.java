@@ -22,6 +22,7 @@ import static com.github.jacopocav.builder.internal.util.StringUtils.composeSett
 import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNullElse;
 import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toUnmodifiableMap;
 import static javax.lang.model.element.Modifier.*;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -39,7 +40,7 @@ public class BuilderAssert extends AbstractRichClassAssert<BuilderAssert> {
 
     private static final PodamFactory PODAM_FACTORY = new PodamFactoryImpl();
 
-    private final Class<?> sourceClass;
+    private final Class<?> targetClass;
     private String className = Defaults.CLASS_NAME;
     private String factoryMethodName = Defaults.FACTORY_METHOD_NAME;
     private CopyFactoryMethodGeneration copyFactoryMethod = Defaults.COPY_FACTORY_METHOD;
@@ -48,9 +49,9 @@ public class BuilderAssert extends AbstractRichClassAssert<BuilderAssert> {
     private String buildMethodName = Defaults.BUILD_METHOD_NAME;
     private final List<Property> properties = new ArrayList<>();
 
-    BuilderAssert(Class<?> builderClass, Class<?> sourceClass) {
+    BuilderAssert(Class<?> builderClass, Class<?> targetClass) {
         super(builderClass, BuilderAssert.class);
-        this.sourceClass = sourceClass;
+        this.targetClass = targetClass;
     }
 
     public static BuilderAssertBuilder assertThatBuilder(Class<?> builderClass) {
@@ -125,17 +126,16 @@ public class BuilderAssert extends AbstractRichClassAssert<BuilderAssert> {
     public BuilderAssert isWellFormed() {
         isPublic();
         hasAnnotation(GeneratedBuilder.class);
-        assertMetadataAnnotationsMatchOptions();
+        assertGeneratedBuilderAnnotationMatchOptions();
         hasDeclaredConstructor(PRIVATE);
-        hasDeclaredMethod(PUBLIC, sourceClass, interpolator.interpolate(buildMethodName, sourceClass));
-        hasDeclaredMethod(Set.of(PUBLIC, STATIC), actual, interpolator.interpolate(factoryMethodName, sourceClass));
+        hasDeclaredMethod(PUBLIC, targetClass, interpolator.interpolate(buildMethodName, targetClass));
+        hasDeclaredMethod(Set.of(PUBLIC, STATIC), actual, interpolator.interpolate(factoryMethodName, targetClass));
 
         if (copyFactoryMethod == CopyFactoryMethodGeneration.ENABLED) {
             hasDeclaredMethod(
                     Set.of(PUBLIC, STATIC),
                     actual,
-                    interpolator.interpolate(copyFactoryMethodName, sourceClass),
-                    sourceClass);
+                    interpolator.interpolate(copyFactoryMethodName, targetClass), targetClass);
         }
 
         Assertions.assertThat(properties).allSatisfy(property -> {
@@ -143,19 +143,22 @@ public class BuilderAssert extends AbstractRichClassAssert<BuilderAssert> {
             hasDeclaredMethod(
                     PUBLIC,
                     actual,
-                    composeSetterName(interpolator.interpolate(setterPrefix, sourceClass), property.name()),
+                    composeSetterName(interpolator.interpolate(setterPrefix, targetClass), property.name()),
                     property.type());
         });
 
         return myself;
     }
 
-    private void assertMetadataAnnotationsMatchOptions() {
+    private void assertGeneratedBuilderAnnotationMatchOptions() {
         var builderOptionsMap =
                 BuilderOption.all().stream().collect(toUnmodifiableMap(BuilderOption::annotationName, identity()));
         var generatedBuilderAnnotation = actual.getAnnotation(GeneratedBuilder.class);
         var generatedBuilderAttributes = Arrays.stream(GeneratedBuilder.class.getDeclaredMethods())
-                .collect(toUnmodifiableMap(Method::getName, m -> getUnchecked(m, generatedBuilderAnnotation)));
+                .collect(toMap(Method::getName, m -> getUnchecked(m, generatedBuilderAnnotation)));
+
+        Assertions.assertThat(generatedBuilderAttributes).containsEntry("targetClass", targetClass);
+        generatedBuilderAttributes.remove("targetClass");
 
         Assertions.assertThat(builderOptionsMap.keySet()).isEqualTo(generatedBuilderAttributes.keySet());
 
@@ -227,12 +230,12 @@ public class BuilderAssert extends AbstractRichClassAssert<BuilderAssert> {
 
     public BuilderAssert isWellBehaved(boolean useRecursiveComparison, RecursiveComparisonConfiguration configuration) {
         try {
-            var createMethod = actual.getMethod(interpolator.interpolate(factoryMethodName, sourceClass));
+            var createMethod = actual.getMethod(interpolator.interpolate(factoryMethodName, targetClass));
             var builder = createMethod.invoke(null);
 
             for (final Property property : properties) {
                 var setter = actual.getMethod(
-                        composeSetterName(interpolator.interpolate(setterPrefix, sourceClass), property.name()),
+                        composeSetterName(interpolator.interpolate(setterPrefix, targetClass), property.name()),
                         TypeUtils.getClass(property.type()));
                 var randomValue = PODAM_FACTORY.manufacturePojoWithFullData(
                         TypeUtils.getClass(property.type()), TypeUtils.getTypeArguments(property.type()));
@@ -240,14 +243,14 @@ public class BuilderAssert extends AbstractRichClassAssert<BuilderAssert> {
                 setter.invoke(builder, randomValue);
             }
 
-            var buildMethod = actual.getMethod(interpolator.interpolate(buildMethodName, sourceClass));
+            var buildMethod = actual.getMethod(interpolator.interpolate(buildMethodName, targetClass));
             var builtValue = buildMethod.invoke(builder);
 
             Assertions.assertThat(builtValue).isNotNull();
 
             if (copyFactoryMethod == CopyFactoryMethodGeneration.ENABLED) {
                 var fromMethod =
-                        actual.getMethod(interpolator.interpolate(copyFactoryMethodName, sourceClass), sourceClass);
+                        actual.getMethod(interpolator.interpolate(copyFactoryMethodName, targetClass), targetClass);
                 var copiedBuilder = fromMethod.invoke(null, builtValue);
                 var copiedValue = buildMethod.invoke(copiedBuilder);
 

@@ -1,7 +1,7 @@
 package com.github.jacopocav.builder.internal.finder;
 
 import com.github.jacopocav.builder.internal.util.StringUtils;
-import com.github.jacopocav.builder.internal.SourceClassRetriever;
+import com.github.jacopocav.builder.internal.TargetClassRetriever;
 
 import javax.lang.model.element.*;
 import javax.lang.model.util.Elements;
@@ -18,12 +18,12 @@ import static javax.lang.model.util.ElementFilter.methodsIn;
 public class AccessorFinder implements Function<VariableElement, Accessor> {
     private final Types types;
     private final Elements elements;
-    private final SourceClassRetriever sourceClassRetriever;
+    private final TargetClassRetriever targetClassRetriever;
 
-    public AccessorFinder(Types types, Elements elements, SourceClassRetriever sourceClassRetriever) {
+    public AccessorFinder(Types types, Elements elements, TargetClassRetriever targetClassRetriever) {
         this.types = types;
         this.elements = elements;
-        this.sourceClassRetriever = sourceClassRetriever;
+        this.targetClassRetriever = targetClassRetriever;
     }
 
     /**
@@ -36,9 +36,9 @@ public class AccessorFinder implements Function<VariableElement, Accessor> {
     @Override
     public Accessor apply(VariableElement argument) {
         var callerPackage = elements.getPackageOf(argument).getQualifiedName();
-        var sourceClass = sourceClassRetriever.getElement(argument);
+        var targetClass = targetClassRetriever.getElement(argument);
 
-        return findAccessorRecursively(sourceClass, argument, callerPackage)
+        return findAccessorRecursively(targetClass, argument, callerPackage)
                 .orElseGet(() -> new Accessor.NotFound(argument));
     }
 

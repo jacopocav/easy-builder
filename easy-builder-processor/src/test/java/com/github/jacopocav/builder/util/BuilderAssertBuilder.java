@@ -8,11 +8,9 @@ public class BuilderAssertBuilder {
     }
 
     /**
-     * Sets the source class (i.e. the class of objects built by the builder).
-     *
-     * @param sourceClass the source class
+     * Sets the target class (i.e. the class of objects built by the builder).
      */
-    public BuilderAssert withSourceClass(Class<?> sourceClass) {
-        return new BuilderAssert(builderClass, sourceClass);
+    public BuilderAssert withTargetClass(Class<?> targetClass) {
+        return new BuilderAssert(builderClass, targetClass);
     }
 }

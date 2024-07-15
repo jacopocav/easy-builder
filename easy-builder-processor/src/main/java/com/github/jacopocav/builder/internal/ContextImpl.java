@@ -1,6 +1,5 @@
 package com.github.jacopocav.builder.internal;
 
-import com.github.jacopocav.builder.annotation.Builder.Defaults;
 import com.github.jacopocav.builder.internal.finder.AccessorFinder;
 import com.github.jacopocav.builder.internal.finder.CreatorMethodFinder;
 import com.github.jacopocav.builder.internal.finder.CreatorMethodFinderImpl;
@@ -42,18 +41,18 @@ class ContextImpl implements Context {
         var javaNameValidator = new JavaNameValidatorImpl(nameTemplateInterpolator);
         var types = processingEnvironment.getTypeUtils();
         var elements = processingEnvironment.getElementUtils();
-        var sourceClassRetriever = new SourceClassRetriever(types);
+        var targetClassRetriever = new TargetClassRetriever(types);
 
         creatorMethodFinder = new CreatorMethodFinderImpl(CreatorMethodFinderStrategies.getAll());
         elementValidator = new ElementValidatorImpl(ValidationRules.getAll(javaNameValidator));
         optionsRepository = new OptionsRepositoryImpl(processingEnvironment.getOptions(), nameTemplateInterpolator);
         builderGenerator = new BuilderGeneratorJte(
-                new SourceClassRetriever(types),
+                new TargetClassRetriever(types),
                 optionsRepository,
-                new GeneratedTypeNameGeneratorImpl(Defaults.CLASS_NAME, elements),
+                new GeneratedTypeNameGeneratorImpl(elements),
                 new JteModelCreator(
                         Clock.systemDefaultZone(),
-                        new MembersGenerator(new AccessorFinder(types, elements, sourceClassRetriever)),
+                        new MembersGenerator(new AccessorFinder(types, elements, targetClassRetriever)),
                         new MetadataAnnotationsGenerator(),
                         new TypeRegistryFactory(),
                         new StaticTemplates()));

@@ -40,10 +40,10 @@ class AnnotatedStaticMethodCompileTest {
                 .andThat()
                 .generatedClass(builderPackage + "." + classSimpleName + "Builder")
                 .testedSuccessfullyBy((builderClass, cuteClassLoader) -> {
-                    var sourceClass = cuteClassLoader.getClass(classQualifiedName);
+                    var targetClass = cuteClassLoader.getClass(classQualifiedName);
 
                     BuilderAssert.assertThatBuilder(builderClass)
-                            .withSourceClass(sourceClass)
+                            .withTargetClass(targetClass)
                             .withProperty(String.class, "someString")
                             .withProperty(long.class, "someLong")
                             .withProperty(listOfIntegers, "someListOfIntegers")
@@ -73,7 +73,7 @@ class AnnotatedStaticMethodCompileTest {
 
     static Stream<Arguments> validSources() {
         // language=java
-        var staticFactoryInsideSourceClass =
+        var staticFactoryInsideTargetClass =
                 """
             package org.example;
             import java.util.List;
@@ -96,7 +96,7 @@ class AnnotatedStaticMethodCompileTest {
         """;
 
         // language=java
-        var staticFactoryOutsideSourceClass =
+        var staticFactoryOutsideTargetClass =
                 """
             package org.example;
             import java.util.List;
@@ -121,7 +121,7 @@ class AnnotatedStaticMethodCompileTest {
         """;
 
         // language=java
-        var sourceClassInUsualPackage =
+        var targetClassInUsualPackage =
                 """
             package org.example;
             import java.util.List;
@@ -153,11 +153,11 @@ class AnnotatedStaticMethodCompileTest {
         """;
 
         return Stream.of(
-                arguments(List.of(readFromString(classQualifiedName, staticFactoryInsideSourceClass)), packageName),
-                arguments(List.of(readFromString(classQualifiedName, staticFactoryOutsideSourceClass)), packageName),
+                arguments(List.of(readFromString(classQualifiedName, staticFactoryInsideTargetClass)), packageName),
+                arguments(List.of(readFromString(classQualifiedName, staticFactoryOutsideTargetClass)), packageName),
                 arguments(
                         List.of(
-                                readFromString(classQualifiedName, sourceClassInUsualPackage),
+                                readFromString(classQualifiedName, targetClassInUsualPackage),
                                 readFromString(anotherPackage + ".FactoryMethods", staticFactoryInOtherPackage)),
                         anotherPackage));
     }

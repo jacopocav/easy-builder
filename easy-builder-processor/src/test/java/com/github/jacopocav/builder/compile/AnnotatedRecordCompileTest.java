@@ -30,7 +30,7 @@ class AnnotatedRecordCompileTest {
 
     @ParameterizedTest
     @MethodSource("compilableRecords")
-    void shouldCompile(String source, String sourceClassName, String builderClassName) {
+    void shouldCompile(String source, String targetClassName, String builderClassName) {
         sut.andSourceFile(recordQualifiedName, source)
                 .whenCompiled()
                 .thenExpectThat()
@@ -41,10 +41,10 @@ class AnnotatedRecordCompileTest {
                 .andThat()
                 .generatedClass(builderClassName)
                 .testedSuccessfullyBy((builderClass, cuteClassLoader) -> {
-                    var sourceClass = cuteClassLoader.getClass(sourceClassName);
+                    var targetClass = cuteClassLoader.getClass(targetClassName);
 
                     BuilderAssert.assertThatBuilder(builderClass)
-                            .withSourceClass(sourceClass)
+                            .withTargetClass(targetClass)
                             .withProperty(String.class, "someString")
                             .withProperty(long.class, "someLong")
                             .withProperty(listOfIntegers, "someListOfIntegers")
@@ -86,10 +86,10 @@ class AnnotatedRecordCompileTest {
                 .andThat()
                 .generatedClass(builderClassName)
                 .testedSuccessfullyBy((builderClass, cuteClassLoader) -> {
-                    var sourceClass = cuteClassLoader.getClass(className);
+                    var targetClass = cuteClassLoader.getClass(className);
 
                     BuilderAssert.assertThatBuilder(builderClass)
-                            .withSourceClass(sourceClass)
+                            .withTargetClass(targetClass)
                             .withProperty(java.sql.Types.class, "sqlTypes")
                             .withProperty(javax.lang.model.util.Types.class, "javaxTypes")
                             .withProperty(listOfStrings, "someListOfStrings")

@@ -12,11 +12,11 @@ public @interface Builder {
     /**
      * Placeholder that will be replaced with the name of the annotated class.
      */
-    String SOURCE_CLASS_NAME = "{SourceClassName}";
+    String TARGET_CLASS_NAME = "{TargetClassName}";
     /**
      * Placeholder that will be replaced with the name of the annotated class, with a lower-case initial.
      */
-    String LOWER_CASE_SOURCE_CLASS_NAME = "{lowerCaseSourceClassName}";
+    String LOWER_CASE_TARGET_CLASS_NAME = "{lowerCaseTargetClassName}";
 
     /**
      * Name of the generated builder class.
@@ -83,7 +83,7 @@ public @interface Builder {
     class Defaults {
         private Defaults() {}
 
-        public static final String CLASS_NAME = SOURCE_CLASS_NAME + "Builder";
+        public static final String CLASS_NAME = TARGET_CLASS_NAME + "Builder";
         public static final String FACTORY_METHOD_NAME = "create";
         public static final String SETTER_PREFIX = "";
         public static final String BUILD_METHOD_NAME = "build";

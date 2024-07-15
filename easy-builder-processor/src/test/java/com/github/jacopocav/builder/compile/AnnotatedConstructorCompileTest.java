@@ -29,7 +29,7 @@ class AnnotatedConstructorCompileTest {
 
     @ParameterizedTest
     @MethodSource("compilableSources")
-    void shouldCompile(String source, String sourceClassName, String builderClassName) {
+    void shouldCompile(String source, String targetClassName, String builderClassName) {
         sut.andSourceFile(classQualifiedName, source)
                 .whenCompiled()
                 .thenExpectThat()
@@ -40,10 +40,10 @@ class AnnotatedConstructorCompileTest {
                 .andThat()
                 .generatedClass(builderClassName)
                 .testedSuccessfullyBy((builderClass, cuteClassLoader) -> {
-                    var sourceClass = cuteClassLoader.getClass(sourceClassName);
+                    var targetClass = cuteClassLoader.getClass(targetClassName);
 
                     BuilderAssert.assertThatBuilder(builderClass)
-                            .withSourceClass(sourceClass)
+                            .withTargetClass(targetClass)
                             .withProperty(String.class, "someString")
                             .withProperty(Long.class, "someLong")
                             .withProperty(listOfExtendsInteger, "someList")

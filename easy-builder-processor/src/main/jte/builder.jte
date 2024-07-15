@@ -15,7 +15,7 @@
 @param String className
 @param Collection<Member> members
 @param InterpolatedOptions options
-@param String sourceClassName
+@param String targetClassName
 @param String enclosingClassName
 @param String staticCreatorMethod
 @param boolean generateCopyFactoryMethod
@@ -34,6 +34,7 @@ package ${packageName};
     date = "${creationTimestamp.toString()}")
 !{var generatedBuilder = typeRegistry.getUsageName(GeneratedBuilder.class);}
 @${generatedBuilder}(
+    targetClass = ${targetClassName}.class,
 @for (var metadata: ForSupport.of(metadataAnnotations))
     ${metadata.get().name()} = ${metadata.get().value()}@if(!metadata.isLast()),@endif
 @endfor)
@@ -54,7 +55,7 @@ public class ${className} {
 
     <%-- static from method --%>
     @if(generateCopyFactoryMethod)
-        public static ${className} ${options.copyFactoryMethodName()}(${sourceClassName} other) {
+        public static ${className} ${options.copyFactoryMethodName()}(${targetClassName} other) {
             return ${options.staticFactoryName()}()
             @for(var member: members)
                 .${member.setterName()}(other.${member.getterName()})
@@ -63,9 +64,9 @@ public class ${className} {
     @endif
 
     <%-- build method --%>
-    public ${sourceClassName} ${options.buildMethodName()}() {
+    public ${targetClassName} ${options.buildMethodName()}() {
         return @if(staticCreatorMethod.isEmpty())
-            new ${sourceClassName}
+            new ${targetClassName}
         @else
             ${enclosingClassName}.${staticCreatorMethod}
         @endif(

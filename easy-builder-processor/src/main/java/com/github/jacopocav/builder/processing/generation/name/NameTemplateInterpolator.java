@@ -14,53 +14,53 @@ import static java.util.stream.Collectors.joining;
 import static javax.lang.model.element.NestingKind.TOP_LEVEL;
 
 public class NameTemplateInterpolator {
-    public String interpolate(String template, Class<?> sourceClass) {
-        return interpolate(template, fullSimpleNameOf(sourceClass));
+    public String interpolate(String template, Class<?> targetClass) {
+        return interpolate(template, fullSimpleNameOf(targetClass));
     }
 
-    public String interpolate(String template, TypeElement sourceType) {
-        return interpolate(template, fullSimpleNameOf(sourceType));
+    public String interpolate(String template, TypeElement targetType) {
+        return interpolate(template, fullSimpleNameOf(targetType));
     }
 
     private String interpolate(String template, String fullSimpleName) {
         var result = template;
 
-        if (template.contains(Builder.SOURCE_CLASS_NAME)) {
-            result = result.replace(Builder.SOURCE_CLASS_NAME, fullSimpleName);
+        if (template.contains(Builder.TARGET_CLASS_NAME)) {
+            result = result.replace(Builder.TARGET_CLASS_NAME, fullSimpleName);
         }
-        if (template.contains(Builder.LOWER_CASE_SOURCE_CLASS_NAME)) {
-            result = result.replace(Builder.LOWER_CASE_SOURCE_CLASS_NAME, decapitalize(fullSimpleName));
+        if (template.contains(Builder.LOWER_CASE_TARGET_CLASS_NAME)) {
+            result = result.replace(Builder.LOWER_CASE_TARGET_CLASS_NAME, decapitalize(fullSimpleName));
         }
 
         return result;
     }
 
-    private String fullSimpleNameOf(Class<?> sourceClass) {
-        if (sourceClass.getEnclosingClass() == null) {
-            return sourceClass.getSimpleName();
+    private String fullSimpleNameOf(Class<?> targetClass) {
+        if (targetClass.getEnclosingClass() == null) {
+            return targetClass.getSimpleName();
         }
 
-        return joinNestedSimpleNames(sourceClass);
+        return joinNestedSimpleNames(targetClass);
     }
 
     @SuppressWarnings("rawtypes")
-    private String joinNestedSimpleNames(Class<?> memberTypeElement) {
-        return Stream.<Class>iterate(memberTypeElement, Objects::nonNull, Class::getEnclosingClass)
+    private String joinNestedSimpleNames(Class<?> targetClass) {
+        return Stream.<Class>iterate(targetClass, Objects::nonNull, Class::getEnclosingClass)
                 .map(Class::getSimpleName)
                 .sorted(reversed())
                 .collect(joining("_"));
     }
 
-    private String fullSimpleNameOf(TypeElement sourceClass) {
-        if (sourceClass.getNestingKind() == TOP_LEVEL) {
-            return sourceClass.getSimpleName().toString();
+    private String fullSimpleNameOf(TypeElement sourceType) {
+        if (sourceType.getNestingKind() == TOP_LEVEL) {
+            return sourceType.getSimpleName().toString();
         }
 
-        return joinNestedSimpleNames(sourceClass);
+        return joinNestedSimpleNames(sourceType);
     }
 
-    private String joinNestedSimpleNames(TypeElement memberTypeElement) {
-        return Stream.iterate(memberTypeElement, el -> isDeclaredType(el.getKind()), Element::getEnclosingElement)
+    private String joinNestedSimpleNames(TypeElement sourceType) {
+        return Stream.iterate(sourceType, el -> isDeclaredType(el.getKind()), Element::getEnclosingElement)
                 .map(Element::getSimpleName)
                 .sorted(reversed())
                 .collect(joining("_"));

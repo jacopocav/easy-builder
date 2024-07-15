@@ -42,7 +42,7 @@ class AnnotatedClassCompileTest {
             import com.github.jacopocav.builder.annotation.Builder;
             import com.github.jacopocav.builder.annotation.Builder.CopyFactoryMethodGeneration;
 
-            @Builder(copyFactoryMethod = CopyFactoryMethodGeneration.DYNAMIC, setterPrefix = "{lowerCaseSourceClassName}_set")
+            @Builder(copyFactoryMethod = CopyFactoryMethodGeneration.DYNAMIC, setterPrefix = "{lowerCaseTargetClassName}_set")
             public class SomeClass {
                 public SomeClass() {}
 
@@ -61,11 +61,11 @@ class AnnotatedClassCompileTest {
                 .andThat()
                 .generatedClass(builderClass)
                 .testedSuccessfullyBy((builderClass, cuteClassLoader) -> {
-                    var sourceClass = cuteClassLoader.getClass(classQualifiedName);
+                    var targetClass = cuteClassLoader.getClass(classQualifiedName);
 
                     BuilderAssert.assertThatBuilder(builderClass)
-                            .withSourceClass(sourceClass)
-                            .withSetterPrefix("{lowerCaseSourceClassName}_set")
+                            .withTargetClass(targetClass)
+                            .withSetterPrefix("{lowerCaseTargetClassName}_set")
                             .withProperty(String.class, "someString")
                             .withProperty(long.class, "someLong")
                             .withProperty(listOfIntegers, "someListOfIntegers")
@@ -89,10 +89,10 @@ class AnnotatedClassCompileTest {
                 .andThat()
                 .generatedClass(builderClassName)
                 .testedSuccessfullyBy((builderClass, cuteClassLoader) -> {
-                    var sourceClass = cuteClassLoader.getClass(innerClassQualifiedName);
+                    var targetClass = cuteClassLoader.getClass(innerClassQualifiedName);
 
                     BuilderAssert.assertThatBuilder(builderClass)
-                            .withSourceClass(sourceClass)
+                            .withTargetClass(targetClass)
                             .withClassName(metadataClassName)
                             .withProperty(String.class, "someString")
                             .withProperty(long.class, "someLong")
@@ -269,7 +269,7 @@ class AnnotatedClassCompileTest {
         var insideInterface = interfaceTemplate.formatted("interface", "", "", builderClassSimpleName);
         var insideAnnotationType = interfaceTemplate.formatted("@interface", "", "", builderClassSimpleName);
 
-        var withDefaultName = template.formatted("class", "", "", "ABuilderOf{SourceClassName}");
+        var withDefaultName = template.formatted("class", "", "", "ABuilderOf{TargetClassName}");
 
         return Stream.of(
                 arguments(insideClass, builderClass, builderClassSimpleName),
@@ -280,6 +280,6 @@ class AnnotatedClassCompileTest {
                 arguments(
                         withDefaultName,
                         packageName + ".ABuilderOfOuterClass" + "_" + classSimpleName,
-                        "ABuilderOf{SourceClassName}"));
+                        "ABuilderOf{TargetClassName}"));
     }
 }

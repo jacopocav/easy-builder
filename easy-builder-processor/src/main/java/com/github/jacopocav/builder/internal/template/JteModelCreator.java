@@ -46,7 +46,7 @@ public class JteModelCreator {
         var packageName = builderName.enclosingPackage().getQualifiedName().toString();
         var processorName = BuilderProcessor.class.getName();
         var creationTimestamp = OffsetDateTime.now(clock);
-        var sourceClassName = typeRegistry.getUsageName(builderData.sourceClass());
+        var targetClassName = typeRegistry.getUsageName(builderData.targetClass());
         var enclosingClassName = typeRegistry.getUsageName(builderData.enclosingClass());
         var metadataAnnotations = metadataAnnotationsGenerator.generate(options.raw());
         var className = builderName.simpleName();
@@ -73,7 +73,7 @@ public class JteModelCreator {
                 className,
                 members,
                 options,
-                sourceClassName,
+                targetClassName,
                 enclosingClassName,
                 staticCreatorMethod,
                 generateCopyFactoryMethod);

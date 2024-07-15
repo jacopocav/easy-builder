@@ -51,10 +51,10 @@ class BuilderOptionsCompileTest {
                 .andThat()
                 .generatedClass(builderQualifiedName)
                 .testedSuccessfullyBy((builderClass, cuteClassLoader) -> {
-                    var sourceClass = cuteClassLoader.getClass(recordQualifiedName);
+                    var targetClass = cuteClassLoader.getClass(recordQualifiedName);
 
                     BuilderAssert.assertThatBuilder(builderClass)
-                            .withSourceClass(sourceClass)
+                            .withTargetClass(targetClass)
                             .withProperty(String.class, "someString")
                             .withProperty(long.class, "someLong")
                             .withProperty(listOfIntegers, "someListOfIntegers")

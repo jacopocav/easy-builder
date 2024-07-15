@@ -1,13 +1,12 @@
 package com.github.jacopocav.builder.internal.template;
 
 import com.github.jacopocav.builder.internal.BuilderGenerator;
-import com.github.jacopocav.builder.internal.SourceClassRetriever;
+import com.github.jacopocav.builder.internal.TargetClassRetriever;
 import com.github.jacopocav.builder.internal.option.OptionsRepository;
 import com.github.jacopocav.builder.internal.option.RawOptions;
 import com.github.jacopocav.builder.processing.generation.GeneratedJavaFile;
 import com.github.jacopocav.builder.processing.generation.name.GeneratedTypeNameGenerator;
 
-import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 
@@ -16,17 +15,17 @@ import javax.lang.model.element.TypeElement;
  */
 public class BuilderGeneratorJte implements BuilderGenerator {
 
-    private final SourceClassRetriever sourceClassRetriever;
+    private final TargetClassRetriever targetClassRetriever;
     private final OptionsRepository optionsRepository;
     private final GeneratedTypeNameGenerator generatedTypeNameGenerator;
     private final JteModelCreator jteModelCreator;
 
     public BuilderGeneratorJte(
-            SourceClassRetriever sourceClassRetriever,
+            TargetClassRetriever targetClassRetriever,
             OptionsRepository optionsRepository,
             GeneratedTypeNameGenerator generatedTypeNameGenerator,
             JteModelCreator jteModelCreator) {
-        this.sourceClassRetriever = sourceClassRetriever;
+        this.targetClassRetriever = targetClassRetriever;
         this.optionsRepository = optionsRepository;
         this.generatedTypeNameGenerator = generatedTypeNameGenerator;
         this.jteModelCreator = jteModelCreator;
@@ -35,15 +34,13 @@ public class BuilderGeneratorJte implements BuilderGenerator {
     @Override
     public GeneratedJavaFile generate(RawOptions rawOptions, ExecutableElement creatorMethod) {
         var enclosingClass = (TypeElement) creatorMethod.getEnclosingElement();
-        var sourceClass = sourceClassRetriever.getElement(creatorMethod);
-        var interpolatedOptions = optionsRepository.getInterpolated(rawOptions, sourceClass);
-        var builderName = generatedTypeNameGenerator.generate(enclosingClass, sourceClass, interpolatedOptions.className());
+        var targetClass = targetClassRetriever.getElement(creatorMethod);
+        var interpolatedOptions = optionsRepository.getInterpolated(rawOptions, targetClass);
+        var builderName = generatedTypeNameGenerator.generate(enclosingClass, interpolatedOptions.className());
 
-        var builderData = new BuilderData(builderName, interpolatedOptions, creatorMethod, sourceClass, enclosingClass);
+        var builderData = new BuilderData(builderName, interpolatedOptions, creatorMethod, targetClass, enclosingClass);
         var jteModel = jteModelCreator.create(builderData);
 
-        var qualifiedName =
-                builderName.enclosingPackage().getQualifiedName().toString() + "." + builderName.simpleName();
-        return new GeneratedJavaFile(qualifiedName, jteModel.render());
+        return new GeneratedJavaFile(builderName.qualifiedName(), jteModel.render());
     }
 }
