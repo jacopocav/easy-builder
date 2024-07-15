@@ -22,6 +22,8 @@ dependencies {
     testImplementation(libs.assertj.core)
     testImplementation(libs.cute)
     testImplementation(libs.junit.jupiter)
+    testImplementation(libs.mockito.junit.jupiter)
+    testImplementation(libs.podam)
 
     testRuntimeOnly(libs.junit.platform.launcher)
 }
@@ -46,6 +48,8 @@ tasks.compileJava {
     options.compilerArgs.add("-Xlint:-requires-automatic")
 
     options.annotationProcessorPath = null
+
+    options.release = 17
 }
 
 tasks.test {

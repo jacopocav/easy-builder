@@ -13,6 +13,7 @@ import com.github.jacopocav.builder.internal.template.JteModelCreator;
 import com.github.jacopocav.builder.processing.error.printer.ProcessingExceptionPrinter;
 import com.github.jacopocav.builder.processing.generation.SingleElementJavaFileGenerator;
 import com.github.jacopocav.builder.processing.generation.name.GeneratedTypeNameGeneratorImpl;
+import com.github.jacopocav.builder.processing.generation.name.NameTemplateInterpolator;
 import com.github.jacopocav.builder.processing.type.TypeRegistryFactory;
 import com.github.jacopocav.builder.processing.validation.ElementValidator;
 import com.github.jacopocav.builder.processing.validation.ElementValidatorImpl;
@@ -26,7 +27,6 @@ import com.github.jacopocav.builder.internal.validation.ValidationRules;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import java.time.Clock;
-import java.util.Map;
 
 class ContextImpl implements Context {
     private final ElementValidator elementValidator;
@@ -35,17 +35,21 @@ class ContextImpl implements Context {
     private final ProcessingExceptionPrinter processingExceptionPrinter;
     private final BuilderGenerator builderGenerator;
     private final GeneratedJavaFileWriter generatedJavaFileWriter;
+    private final OptionsRepository optionsRepository;
 
     ContextImpl(ProcessingEnvironment processingEnvironment) {
-        var javaNameValidator = new JavaNameValidatorImpl();
+        var nameTemplateInterpolator = new NameTemplateInterpolator();
+        var javaNameValidator = new JavaNameValidatorImpl(nameTemplateInterpolator);
         var types = processingEnvironment.getTypeUtils();
         var elements = processingEnvironment.getElementUtils();
         var sourceClassRetriever = new SourceClassRetriever(types);
 
         creatorMethodFinder = new CreatorMethodFinderImpl(CreatorMethodFinderStrategies.getAll());
         elementValidator = new ElementValidatorImpl(ValidationRules.getAll(javaNameValidator));
+        optionsRepository = new OptionsRepositoryImpl(processingEnvironment.getOptions(), nameTemplateInterpolator);
         builderGenerator = new BuilderGeneratorJte(
                 new SourceClassRetriever(types),
+                optionsRepository,
                 new GeneratedTypeNameGeneratorImpl(Defaults.CLASS_NAME, elements),
                 new JteModelCreator(
                         Clock.systemDefaultZone(),
@@ -60,18 +64,13 @@ class ContextImpl implements Context {
     }
 
     @Override
-    public SingleElementJavaFileGenerator singleBuilderJavaFileGenerator(Map<String, String> options) {
-        return new SingleBuilderJavaFileGenerator(
-                elementValidator, creatorMethodFinder, builderGenerator, defaultOptionsRepository(options));
+    public SingleElementJavaFileGenerator singleBuilderJavaFileGenerator() {
+        return new SingleBuilderJavaFileGenerator(elementValidator, creatorMethodFinder, optionsRepository, builderGenerator);
     }
 
     @Override
     public OptionCompilerArgumentsValidator optionCompilerArgumentsValidator() {
         return optionCompilerArgumentsValidator;
-    }
-
-    private OptionsRepository defaultOptionsRepository(Map<String, String> options) {
-        return new OptionsRepositoryImpl(options);
     }
 
     @Override

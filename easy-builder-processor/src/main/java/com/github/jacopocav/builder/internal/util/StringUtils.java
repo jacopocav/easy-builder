@@ -1,5 +1,6 @@
 package com.github.jacopocav.builder.internal.util;
 
+import static java.lang.Character.toLowerCase;
 import static java.lang.Character.toTitleCase;
 
 public class StringUtils {
@@ -19,6 +20,16 @@ public class StringUtils {
 
         var builder = new StringBuilder(string);
         builder.setCharAt(0, toTitleCase(builder.charAt(0)));
+        return builder.toString();
+    }
+
+    public static String decapitalize(String string) {
+        if (isNullOrBlank(string)) {
+            return string;
+        }
+
+        var builder = new StringBuilder(string);
+        builder.setCharAt(0, toLowerCase(builder.charAt(0)));
         return builder.toString();
     }
 

@@ -7,34 +7,28 @@ import com.github.jacopocav.builder.processor.BuilderProcessor;
 import java.util.Optional;
 import java.util.Set;
 
-import static java.util.stream.Collectors.toUnmodifiableSet;
-
 /**
  * Options supported by {@link BuilderProcessor}, both as
  * compiler arguments and as {@link Builder} annotation
  * attributes.
  */
 public enum BuilderOption {
-    CLASS_NAME("className", Defaults.CLASS_NAME, false, false),
-    SETTER_PREFIX("setterPrefix", Defaults.SETTER_PREFIX, true, true),
-    BUILD_METHOD_NAME("buildMethodName", Defaults.BUILD_METHOD_NAME, true, false),
-    STATIC_FACTORY_NAME("staticFactoryName", Defaults.FACTORY_METHOD_NAME, true, false),
-    COPY_FACTORY_METHOD("generateStaticFromMethod", Defaults.COPY_FACTORY_METHOD, true, false),
-    COPY_FACTORY_METHOD_NAME("staticFromMethodName", Defaults.COPY_FACTORY_METHOD_NAME, true, false);
+    CLASS_NAME("className", Defaults.CLASS_NAME, false),
+    SETTER_PREFIX("setterPrefix", Defaults.SETTER_PREFIX, true),
+    BUILD_METHOD_NAME("buildMethodName", Defaults.BUILD_METHOD_NAME, false),
+    FACTORY_METHOD_NAME("factoryMethodName", Defaults.FACTORY_METHOD_NAME, false),
+    COPY_FACTORY_METHOD("copyFactoryMethod", Defaults.COPY_FACTORY_METHOD, false),
+    COPY_FACTORY_METHOD_NAME("copyFactoryMethodName", Defaults.COPY_FACTORY_METHOD_NAME, false);
 
     private static final Set<BuilderOption> ALL = Set.of(values());
-    private static final Set<BuilderOption> COMPILER_ARGUMENTS =
-            ALL.stream().filter(BuilderOption::isCompilerArgument).collect(toUnmodifiableSet());
 
     private final String annotationName;
     private final Object defaultValue;
-    private final boolean isCompilerArgument;
     private final boolean isPrefix;
 
-    BuilderOption(String annotationName, Object defaultValue, boolean isCompilerArgument, boolean isPrefix) {
+    BuilderOption(String annotationName, Object defaultValue, boolean isPrefix) {
         this.annotationName = annotationName;
         this.defaultValue = defaultValue;
-        this.isCompilerArgument = isCompilerArgument;
         this.isPrefix = isPrefix;
     }
 
@@ -42,12 +36,8 @@ public enum BuilderOption {
         return ALL;
     }
 
-    public static Set<BuilderOption> allCompilerArguments() {
-        return COMPILER_ARGUMENTS;
-    }
-
     public static Optional<BuilderOption> findByCompilerName(String compilerName) {
-        return allCompilerArguments().stream()
+        return all().stream()
                 .filter(opt -> opt.compilerName().equals(compilerName))
                 .findFirst();
     }
@@ -70,10 +60,6 @@ public enum BuilderOption {
     @SuppressWarnings("unchecked")
     public <T> T defaultValue() {
         return (T) defaultValue;
-    }
-
-    public boolean isCompilerArgument() {
-        return isCompilerArgument;
     }
 
     /**

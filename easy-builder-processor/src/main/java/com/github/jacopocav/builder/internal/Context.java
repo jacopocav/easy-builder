@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public interface Context {
 
-    SingleElementJavaFileGenerator singleBuilderJavaFileGenerator(Map<String, String> options);
+    SingleElementJavaFileGenerator singleBuilderJavaFileGenerator();
 
     OptionCompilerArgumentsValidator optionCompilerArgumentsValidator();
 

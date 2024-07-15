@@ -19,6 +19,8 @@ dependencies {
 
 tasks.compileJava {
     options.compilerArgs.add("-Xlint:all")
+
+    options.release = 17
 }
 
 tasks.test {

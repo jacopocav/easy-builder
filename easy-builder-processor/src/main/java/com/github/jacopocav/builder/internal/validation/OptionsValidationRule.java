@@ -77,7 +77,7 @@ class OptionsValidationRule implements ValidationRule {
         return switch (option) {
             case SETTER_PREFIX -> javaNameValidator.isValidNamePrefix(value);
             case CLASS_NAME -> value.isEmpty() || javaNameValidator.isValidName(value);
-            case BUILD_METHOD_NAME, STATIC_FACTORY_NAME, COPY_FACTORY_METHOD_NAME -> javaNameValidator.isValidName(
+            case BUILD_METHOD_NAME, FACTORY_METHOD_NAME, COPY_FACTORY_METHOD_NAME -> javaNameValidator.isValidName(
                     value);
             case COPY_FACTORY_METHOD -> true;
         };

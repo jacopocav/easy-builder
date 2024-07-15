@@ -52,9 +52,9 @@ public @interface Builder {
      * from the builder. A property is accessible if its getter or field can be read from the builder class without
      * using reflection.
      * <p>
-     * Defaults to {@link CopyFactoryMethodGeneration#ENABLED_STRICT}.
+     * Defaults to {@link CopyFactoryMethodGeneration#ENABLED}.
      */
-    CopyFactoryMethodGeneration copyFactoryMethod() default CopyFactoryMethodGeneration.ENABLED_STRICT;
+    CopyFactoryMethodGeneration copyFactoryMethod() default CopyFactoryMethodGeneration.ENABLED;
 
     /**
      * Name of the static copy factory method, if enabled with {@link #copyFactoryMethod()}.
@@ -71,13 +71,13 @@ public @interface Builder {
          * A copy factory method will be generated, and a compilation will fail if some property of the
          * source class is not accessible (i.e. has no accessible getter or field).
          */
-        ENABLED_STRICT,
+        ENABLED,
         /**
          * A copy factory method will be generated only if all properties of the source class are accessible
          * (i.e. its getter or field are accessible without using reflection).
          * <p>A compiler warning will be printed in case one or more properties are not accessible.
          */
-        ENABLED_LENIENT
+        DYNAMIC
     }
 
     class Defaults {
@@ -88,7 +88,7 @@ public @interface Builder {
         public static final String SETTER_PREFIX = "";
         public static final String BUILD_METHOD_NAME = "build";
         public static final CopyFactoryMethodGeneration COPY_FACTORY_METHOD =
-                CopyFactoryMethodGeneration.ENABLED_STRICT;
+                CopyFactoryMethodGeneration.ENABLED;
         public static final String COPY_FACTORY_METHOD_NAME = "from";
     }
 }

@@ -1,5 +1,7 @@
 package com.github.jacopocav.builder.processing.type;
 
+import com.github.jacopocav.builder.internal.util.MultiReleaseUtils;
+
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.ArrayType;
 import javax.lang.model.type.DeclaredType;
@@ -10,59 +12,60 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
 
+import static com.github.jacopocav.builder.internal.util.MultiReleaseUtils.getFirst;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.joining;
 
 class TypeRegistryImpl implements TypeRegistry {
     private static final Type[] EXTENDS_OBJECT_BOUND = {Object.class};
-    private final Map<String, SequencedSet<String>> ambiguitiesBySimpleName = new HashMap<>();
+    private final Map<String, LinkedHashSet<String>> ambiguitiesBySimpleName = new HashMap<>();
 
     public void register(Type type) {
         getUsageName(type);
     }
 
     public String getUsageName(Type type) {
-        return switch (type) {
-            case Class<?> cls
-                    when cls.isPrimitive() -> cls.getName();
-            case Class<?> cls
-                    when cls.isArray() -> getUsageName(cls.getComponentType()) + "[]";
-            case Class<?> cls -> switch (visit((Class<?>) type)) {
+        if (type instanceof Class<?> cls) {
+            if (cls.isPrimitive()) {
+                return cls.getName();
+            }
+            if (cls.isArray()) {
+                return getUsageName(cls.getComponentType()) + "[]";
+            }
+
+            return switch (visit(cls)) {
                 case SAFE -> cls.getSimpleName();
-                case AMBIGUOUS -> cls.getName();
+                case AMBIGUOUS -> cls.getCanonicalName();
             };
+        }
 
-            case ParameterizedType pt -> {
-                var rawName = getUsageName(pt.getRawType());
-                var typeArguments = stream(pt.getActualTypeArguments())
-                        .map(this::getUsageName)
-                        .collect(joining(", ", "<", ">"));
+        if (type instanceof ParameterizedType pt) {
+            var rawName = getUsageName(pt.getRawType());
+            var typeArguments =
+                    stream(pt.getActualTypeArguments()).map(this::getUsageName).collect(joining(", ", "<", ">"));
 
-                yield rawName + typeArguments;
+            return rawName + typeArguments;
+        }
+
+        if (type instanceof GenericArrayType gat) {
+            return getUsageName(gat.getGenericComponentType()) + "[]";
+        }
+
+        if (type instanceof java.lang.reflect.WildcardType wt) {
+            var lowerBounds = wt.getLowerBounds();
+            if (lowerBounds.length > 0) {
+                return "? super " + stream(lowerBounds).map(this::getUsageName).collect(joining(" & "));
             }
 
-            case GenericArrayType gat -> getUsageName(gat.getGenericComponentType()) + "[]";
-
-            case java.lang.reflect.WildcardType wt -> {
-                var lowerBounds = wt.getLowerBounds();
-                if (lowerBounds.length > 0) {
-                    yield "? super " + stream(lowerBounds)
-                            .map(this::getUsageName)
-                            .collect(joining(" & "));
-                }
-
-                var upperBounds = wt.getUpperBounds();
-                if (upperBounds.length == 0 || Arrays.equals(upperBounds, EXTENDS_OBJECT_BOUND)) {
-                    yield "?";
-                }
-
-                yield "? extends " + stream(upperBounds)
-                        .map(this::getUsageName)
-                        .collect(joining(" & "));
+            var upperBounds = wt.getUpperBounds();
+            if (upperBounds.length == 0 || Arrays.equals(upperBounds, EXTENDS_OBJECT_BOUND)) {
+                return "?";
             }
 
-            default -> type.getTypeName();
-        };
+            return "? extends " + stream(upperBounds).map(this::getUsageName).collect(joining(" & "));
+        }
+
+        return type.getTypeName();
     }
 
     public String getUsageName(TypeElement typeElement) {
@@ -81,8 +84,7 @@ class TypeRegistryImpl implements TypeRegistry {
                 var name = getUsageName(typeElement);
                 var typeArguments = declaredType.getTypeArguments();
                 if (!typeArguments.isEmpty()) {
-                    name += "<"
-                            + typeArguments.stream().map(this::getUsageName).collect(joining(", ")) + ">";
+                    name += "<" + typeArguments.stream().map(this::getUsageName).collect(joining(", ")) + ">";
                 }
                 yield name;
             }
@@ -104,7 +106,7 @@ class TypeRegistryImpl implements TypeRegistry {
 
     public Collection<String> getSafeImports() {
         return ambiguitiesBySimpleName.values().stream()
-                .map(SequencedCollection::getFirst)
+                .map(MultiReleaseUtils::getFirst)
                 .toList();
     }
 
@@ -119,14 +121,14 @@ class TypeRegistryImpl implements TypeRegistry {
 
     private VisitedType visit(Class<?> cls) {
         var ambiguities = ambiguitiesBySimpleName.computeIfAbsent(cls.getSimpleName(), k -> new LinkedHashSet<>());
-        var qualifiedName = cls.getName();
+        var qualifiedName = cls.getCanonicalName();
         ambiguities.add(qualifiedName);
 
         return isAmbiguous(ambiguities, qualifiedName) ? VisitedType.AMBIGUOUS : VisitedType.SAFE;
     }
 
-    private boolean isAmbiguous(SequencedSet<String> ambiguities, String qualifiedName) {
-        return ambiguities.size() > 1 && !ambiguities.getFirst().equals(qualifiedName);
+    private boolean isAmbiguous(LinkedHashSet<String> ambiguities, String qualifiedName) {
+        return ambiguities.size() > 1 && !getFirst(ambiguities).equals(qualifiedName);
     }
 
     private enum VisitedType {

@@ -4,6 +4,7 @@ import com.github.jacopocav.builder.processing.error.ProcessingException;
 import com.github.jacopocav.builder.processing.validation.rule.ValidationRule;
 
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementKind;
 import java.util.Collection;
 import java.util.List;
 
@@ -32,7 +33,8 @@ final class ClassValidationRule implements ValidationRule {
     }
 
     private boolean isNonStaticInnerClass(Element element) {
-        return element.getEnclosingElement().getKind().isDeclaredType()
+        var enclosingKind = element.getEnclosingElement().getKind();
+        return (enclosingKind.isClass() || enclosingKind.isInterface())
                 && !element.getModifiers().contains(STATIC);
     }
 }

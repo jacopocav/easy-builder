@@ -1,5 +1,6 @@
 package com.github.jacopocav.builder.internal.template;
 
+import com.github.jacopocav.builder.annotation.Builder.CopyFactoryMethodGeneration;
 import com.github.jacopocav.builder.annotation.GeneratedBuilder;
 import com.github.jacopocav.builder.internal.template.jte.Templates;
 import com.github.jacopocav.builder.processing.type.TypeRegistryFactory;
@@ -8,6 +9,7 @@ import gg.jte.models.runtime.JteModel;
 
 import java.time.Clock;
 import java.time.OffsetDateTime;
+import java.util.Objects;
 
 import static javax.lang.model.element.ElementKind.METHOD;
 
@@ -46,14 +48,20 @@ public class JteModelCreator {
         var creationTimestamp = OffsetDateTime.now(clock);
         var sourceClassName = typeRegistry.getUsageName(builderData.sourceClass());
         var enclosingClassName = typeRegistry.getUsageName(builderData.enclosingClass());
-        var metadataAnnotations = metadataAnnotationsGenerator.generate(options);
+        var metadataAnnotations = metadataAnnotationsGenerator.generate(options.raw());
         var className = builderName.simpleName();
         var members = membersGenerator.apply(builderData, typeRegistry);
         var staticCreatorMethod = creatorMethod.getKind() == METHOD
                 ? creatorMethod.getSimpleName().toString()
                 : "";
+        var generateCopyFactoryMethod = switch (options.copyFactoryMethod()) {
+            case DISABLED -> false;
+            case ENABLED -> true;
+            case DYNAMIC -> members.stream().map(Member::getterName).allMatch(Objects::nonNull);
+        };
 
         typeRegistry.register(GeneratedBuilder.class);
+        typeRegistry.register(CopyFactoryMethodGeneration.class);
         typeRegistry.register(javax.annotation.processing.Generated.class);
 
         return templates.builder(
@@ -67,6 +75,7 @@ public class JteModelCreator {
                 options,
                 sourceClassName,
                 enclosingClassName,
-                staticCreatorMethod);
+                staticCreatorMethod,
+                generateCopyFactoryMethod);
     }
 }

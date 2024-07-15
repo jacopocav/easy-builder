@@ -7,6 +7,7 @@ module com.github.jacopocav.easybuilder.processor {
     requires java.compiler;
     requires gg.jte.runtime;
     requires gg.jte.models;
+    requires com.fasterxml.jackson.databind;
 
     provides Processor with
             BuilderProcessor;

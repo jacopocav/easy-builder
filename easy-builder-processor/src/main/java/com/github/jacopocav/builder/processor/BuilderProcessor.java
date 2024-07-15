@@ -54,7 +54,7 @@ public class BuilderProcessor extends AbstractProcessor {
 
     @Override
     public Set<String> getSupportedOptions() {
-        return BuilderOption.allCompilerArguments().stream()
+        return BuilderOption.all().stream()
                 .map(BuilderOption::compilerName)
                 .collect(toUnmodifiableSet());
     }
@@ -69,7 +69,7 @@ public class BuilderProcessor extends AbstractProcessor {
         super.init(processingEnv);
         initNonNullOptions(processingEnv);
         context = requireNonNullElseGet(context, () -> Context.createDefault(processingEnv));
-        singleElementJavaFileGenerator = context.singleBuilderJavaFileGenerator(nonNullArguments);
+        singleElementJavaFileGenerator = context.singleBuilderJavaFileGenerator();
         optionCompilerArgumentsValidator = context.optionCompilerArgumentsValidator();
         generatedJavaFileWriter = context.generatedJavaFileWriter();
         processingExceptionPrinter = context.processingExceptionPrinter();

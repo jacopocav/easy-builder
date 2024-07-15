@@ -1,74 +1,17 @@
 package com.github.jacopocav.builder.internal.option;
 
-import java.util.Optional;
+import com.github.jacopocav.builder.annotation.Builder.CopyFactoryMethodGeneration;
 
-/**
- * A record containing all the computed {@link BuilderOption} values for a specific
- * {@link com.github.jacopocav.builder.annotation.Builder @Builder}.
- */
-public record Options(
-        Optional<String> className,
-        String setterPrefix,
-        String buildMethodName,
-        String staticFactoryName,
-        boolean generateStaticFromMethod,
-        String staticFromMethodName) {
+public sealed interface Options permits RawOptions, InterpolatedOptions {
+    String className();
 
-    public static Builder builder() {
-        return new Builder();
-    }
+    String setterPrefix();
 
-    /**
-     * We can't use {@link com.github.jacopocav.builder.annotation.Builder @Builder} here :D
-     */
-    public static final class Builder {
-        private Optional<String> className = Optional.empty();
-        private String setterPrefix;
-        private String buildMethodName;
-        private String staticFactoryName;
-        private boolean generateStaticFromMethod;
-        private String staticFromMethodName;
+    String buildMethodName();
 
-        private Builder() {}
+    String staticFactoryName();
 
-        public Builder withClassName(Optional<String> className) {
-            this.className = className;
-            return this;
-        }
+    CopyFactoryMethodGeneration copyFactoryMethod();
 
-        public Builder withSetterPrefix(String setterPrefix) {
-            this.setterPrefix = setterPrefix;
-            return this;
-        }
-
-        public Builder withBuildMethodName(String buildMethodName) {
-            this.buildMethodName = buildMethodName;
-            return this;
-        }
-
-        public Builder withStaticFactoryName(String staticFactoryName) {
-            this.staticFactoryName = staticFactoryName;
-            return this;
-        }
-
-        public Builder withGenerateStaticFromMethod(boolean generateStaticFromMethod) {
-            this.generateStaticFromMethod = generateStaticFromMethod;
-            return this;
-        }
-
-        public Builder withStaticFromMethodName(String staticFromMethodName) {
-            this.staticFromMethodName = staticFromMethodName;
-            return this;
-        }
-
-        public Options build() {
-            return new Options(
-                    className,
-                    setterPrefix,
-                    buildMethodName,
-                    staticFactoryName,
-                    generateStaticFromMethod,
-                    staticFromMethodName);
-        }
-    }
+    String copyFactoryMethodName();
 }

@@ -6,6 +6,7 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 
 import static com.github.jacopocav.builder.internal.finder.strategy.CreatorMethod.Error.*;
+import static com.github.jacopocav.builder.internal.util.MultiReleaseUtils.getFirst;
 import static javax.lang.model.element.ElementKind.CLASS;
 import static javax.lang.model.element.Modifier.PRIVATE;
 import static javax.lang.model.util.ElementFilter.constructorsIn;
@@ -34,7 +35,7 @@ class ClassConstructorFinderStrategy implements CreatorMethodFinderStrategy {
 
         return switch (candidateConstructors.size()) {
             case 0 -> NOT_FOUND;
-            case 1 -> new Found(candidateConstructors.getFirst());
+            case 1 -> new Found(getFirst(candidateConstructors));
             default -> TOO_MANY_FOUND;
         };
     }

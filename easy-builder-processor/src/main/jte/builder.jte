@@ -1,10 +1,9 @@
 @import java.util.Collection
 @import java.time.OffsetDateTime
 @import com.github.jacopocav.builder.annotation.GeneratedBuilder
+@import com.github.jacopocav.builder.internal.option.InterpolatedOptions
 @import com.github.jacopocav.builder.processing.type.TypeRegistry
 @import gg.jte.support.ForSupport
-@import com.github.jacopocav.builder.annotation.GeneratedBuilder
-@import com.github.jacopocav.builder.internal.option.Options
 @import com.github.jacopocav.builder.internal.template.Member
 @import com.github.jacopocav.builder.internal.template.MetadataAnnotation
 
@@ -15,10 +14,11 @@
 @param Collection<MetadataAnnotation> metadataAnnotations
 @param String className
 @param Collection<Member> members
-@param Options options
+@param InterpolatedOptions options
 @param String sourceClassName
 @param String enclosingClassName
 @param String staticCreatorMethod
+@param boolean generateCopyFactoryMethod
 
 package ${packageName};
 
@@ -34,8 +34,8 @@ package ${packageName};
     date = "${creationTimestamp.toString()}")
 !{var generatedBuilder = typeRegistry.getUsageName(GeneratedBuilder.class);}
 @${generatedBuilder}(
-@for (var metadata: metadataAnnotations)
-    ${metadata.name()} = ${metadata.value()}
+@for (var metadata: ForSupport.of(metadataAnnotations))
+    ${metadata.get().name()} = ${metadata.get().value()}@if(!metadata.isLast()),@endif
 @endfor)
 <%-- builder class --%>
 public class ${className} {
@@ -53,8 +53,8 @@ public class ${className} {
     }
 
     <%-- static from method --%>
-    @if(options.generateStaticFromMethod())
-        public static ${className} ${options.staticFromMethodName()}(${sourceClassName} other) {
+    @if(generateCopyFactoryMethod)
+        public static ${className} ${options.copyFactoryMethodName()}(${sourceClassName} other) {
             return ${options.staticFactoryName()}()
             @for(var member: members)
                 .${member.setterName()}(other.${member.getterName()})

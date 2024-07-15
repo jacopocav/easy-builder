@@ -1,9 +1,11 @@
 package com.github.jacopocav.builder.processing.error.printer;
 
+import com.github.jacopocav.builder.internal.finder.strategy.CreatorMethod.Error;
 import com.github.jacopocav.builder.processing.error.AggregatedProcessingException;
 import com.github.jacopocav.builder.processing.error.ProcessingException;
 
 import javax.annotation.processing.Messager;
+import javax.tools.Diagnostic.Kind;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
@@ -24,7 +26,7 @@ public class ProcessingExceptionPrinter {
 
     public void print(ProcessingException processingException) {
         var message = printStackTrace ? getStackTrace(processingException) : processingException.getMessage();
-        messager.printError(messagePrefix + message, processingException.element());
+        messager.printMessage(Kind.ERROR, messagePrefix + message, processingException.element());
     }
 
     public void print(AggregatedProcessingException aggregatedProcessingException) {
