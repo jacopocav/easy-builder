@@ -113,9 +113,9 @@ Example usage of the builder:
 var myRecord = MyRecordBuilder.create().myString("foo").myInt(42).build();
 ```
 
-### Advanced usage
+## Advanced usage
 
-#### Options
+### Options
 
 The `@Builder` can be used as-is in most cases. The annotation also allows to customize a few things by setting some
 attributes explicitly:
@@ -135,7 +135,7 @@ attributes explicitly:
       accessible from the builder, either through direct field access or through getters)
 - `copyFactoryMethodName`: name of the copy factory method. The default is `from`.
 
-#### Compiler arguments
+### Compiler arguments
 
 The defaults for all options can be customized globally by passing compiler arguments.
 The syntax is as follows:
@@ -153,7 +153,7 @@ For example, by passing
 the default setter prefix for all builders will be `with` instead of the empty string.
 Options explicitly specified on the `@Builder` annotation always take precedence over compiler argument values.
 
-#### Annotation targets
+### Annotation targets
 
 The `@Builder` annotation can be placed on:
 
