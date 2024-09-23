@@ -1,14 +1,16 @@
 package com.github.jacopocav.builder.internal.finder.strategy;
 
+import com.github.jacopocav.builder.internal.finder.strategy.CreatorMethod.Found;
+import com.github.jacopocav.builder.internal.util.IterableUtils;
+
+import javax.lang.model.element.Element;
+import javax.lang.model.element.ExecutableElement;
+
 import static com.github.jacopocav.builder.internal.finder.strategy.CreatorMethod.Error.*;
-import static com.github.jacopocav.builder.internal.util.MultiReleaseUtils.getFirst;
+import static com.github.jacopocav.builder.internal.util.IterableUtils.getFirst;
 import static javax.lang.model.element.ElementKind.CLASS;
 import static javax.lang.model.element.Modifier.PRIVATE;
 import static javax.lang.model.util.ElementFilter.constructorsIn;
-
-import com.github.jacopocav.builder.internal.finder.strategy.CreatorMethod.Found;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.ExecutableElement;
 
 class ClassConstructorFinderStrategy implements CreatorMethodFinderStrategy {
     /**

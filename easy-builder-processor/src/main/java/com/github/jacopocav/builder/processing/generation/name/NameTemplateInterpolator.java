@@ -1,16 +1,18 @@
 package com.github.jacopocav.builder.processing.generation.name;
 
-import static com.github.jacopocav.builder.internal.util.MultiReleaseUtils.isDeclaredType;
-import static com.github.jacopocav.builder.internal.util.StringUtils.decapitalize;
-import static java.util.stream.Collectors.joining;
-import static javax.lang.model.element.NestingKind.TOP_LEVEL;
-
 import com.github.jacopocav.builder.annotation.Builder;
+
+import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.TypeElement;
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.stream.Stream;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.TypeElement;
+
+import static com.github.jacopocav.builder.internal.util.ElementUtils.isDeclaredType;
+import static com.github.jacopocav.builder.internal.util.StringUtils.decapitalize;
+import static java.util.stream.Collectors.joining;
+import static javax.lang.model.element.NestingKind.TOP_LEVEL;
 
 public class NameTemplateInterpolator {
     public String interpolate(String template, Class<?> targetClass) {
@@ -59,7 +61,10 @@ public class NameTemplateInterpolator {
     }
 
     private String joinNestedSimpleNames(TypeElement sourceType) {
-        return Stream.iterate(sourceType, el -> isDeclaredType(el.getKind()), Element::getEnclosingElement)
+        return Stream.iterate(sourceType, el -> {
+                    ElementKind elementKind = el.getKind();
+                    return isDeclaredType(elementKind);
+                }, Element::getEnclosingElement)
                 .map(Element::getSimpleName)
                 .sorted(reversed())
                 .collect(joining("_"));

@@ -1,19 +1,20 @@
 package com.github.jacopocav.builder.processing.type;
 
-import static com.github.jacopocav.builder.internal.util.MultiReleaseUtils.getFirst;
-import static java.util.Arrays.stream;
-import static java.util.stream.Collectors.joining;
+import com.github.jacopocav.builder.internal.util.IterableUtils;
 
-import com.github.jacopocav.builder.internal.util.MultiReleaseUtils;
-import java.lang.reflect.GenericArrayType;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.*;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.ArrayType;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.type.WildcardType;
+import java.lang.reflect.GenericArrayType;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.*;
+
+import static com.github.jacopocav.builder.internal.util.IterableUtils.getFirst;
+import static java.util.Arrays.stream;
+import static java.util.stream.Collectors.joining;
 
 class TypeRegistryImpl implements TypeRegistry {
     private static final Type[] EXTENDS_OBJECT_BOUND = {Object.class};
@@ -105,7 +106,7 @@ class TypeRegistryImpl implements TypeRegistry {
 
     public Collection<String> getSafeImports() {
         return ambiguitiesBySimpleName.values().stream()
-                .map(MultiReleaseUtils::getFirst)
+                .map(IterableUtils::getFirst)
                 .toList();
     }
 
