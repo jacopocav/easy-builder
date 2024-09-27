@@ -5,13 +5,13 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 import com.github.jacopocav.builder.processor.BuilderProcessor;
 import com.github.jacopocav.builder.util.BuilderAssert;
 import com.github.jacopocav.builder.util.Generated;
-import com.github.jacopocav.builder.util.GenericType;
 import com.github.jacopocav.builder.util.SourceUtils;
 import io.toolisticon.cute.Cute;
 import io.toolisticon.cute.CuteApi.BlackBoxTestSourceFilesInterface;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.stream.Stream;
+import org.instancio.TypeToken;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -22,7 +22,7 @@ class AnnotatedRecordCompileTest {
     private static final String recordSimpleName = "SomeRecord";
     private static final String recordQualifiedName = packageName + "." + recordSimpleName;
     private static final String errorPositionTarget = "record " + recordSimpleName;
-    private static final Type listOfIntegers = new GenericType<List<Integer>>() {}.getGenericType();
+    private static final Type listOfIntegers = new TypeToken<List<Integer>>() {}.get();
 
     private final BlackBoxTestSourceFilesInterface sut =
             Cute.blackBoxTest().given().processor(BuilderProcessor.class);
@@ -73,7 +73,7 @@ class AnnotatedRecordCompileTest {
 
         var className = packageName + ".Metadata";
         var builderClassName = className + "Builder";
-        var listOfStrings = new GenericType<List<String>>() {}.getGenericType();
+        var listOfStrings = new TypeToken<List<String>>() {}.get();
 
         sut.andSourceFile(className, source)
                 .whenCompiled()

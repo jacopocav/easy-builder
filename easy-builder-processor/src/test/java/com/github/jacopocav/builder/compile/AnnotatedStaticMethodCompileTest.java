@@ -5,7 +5,6 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 import com.github.jacopocav.builder.processor.BuilderProcessor;
 import com.github.jacopocav.builder.util.BuilderAssert;
-import com.github.jacopocav.builder.util.GenericType;
 import com.github.jacopocav.builder.util.SourceUtils;
 import io.toolisticon.cute.Cute;
 import io.toolisticon.cute.CuteApi.BlackBoxTestSourceFilesInterface;
@@ -13,6 +12,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.stream.Stream;
 import javax.tools.JavaFileObject;
+import org.instancio.TypeToken;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -24,7 +24,7 @@ class AnnotatedStaticMethodCompileTest {
     private static final String classQualifiedName = packageName + "." + classSimpleName;
     private static final String staticMethodName = "someMethod";
     private static final String errorPositionTarget = staticMethodName + "(";
-    private static final Type listOfIntegers = new GenericType<List<Integer>>() {}.getGenericType();
+    private static final Type listOfIntegers = new TypeToken<List<Integer>>() {}.get();
 
     private final BlackBoxTestSourceFilesInterface sut =
             Cute.blackBoxTest().given().processor(BuilderProcessor.class);

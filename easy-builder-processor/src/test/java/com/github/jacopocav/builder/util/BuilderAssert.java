@@ -23,8 +23,7 @@ import java.util.List;
 import java.util.Set;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.recursive.comparison.RecursiveComparisonConfiguration;
-import uk.co.jemos.podam.api.PodamFactory;
-import uk.co.jemos.podam.api.PodamFactoryImpl;
+import org.instancio.Instancio;
 
 /**
  * Assert class for generated builder classes.
@@ -36,8 +35,6 @@ public class BuilderAssert extends AbstractRichClassAssert<BuilderAssert> {
 
     private static final RecursiveComparisonConfiguration DEFAULT_RECURSIVE_COMPARISON_CONFIG =
             new RecursiveComparisonConfiguration();
-
-    private static final PodamFactory PODAM_FACTORY = new PodamFactoryImpl();
 
     private final Class<?> targetClass;
     private String className = Defaults.CLASS_NAME;
@@ -237,8 +234,7 @@ public class BuilderAssert extends AbstractRichClassAssert<BuilderAssert> {
                 var setter = actual.getMethod(
                         composeSetterName(interpolator.interpolate(setterPrefix, targetClass), property.name()),
                         TypeUtils.getClass(property.type()));
-                var randomValue = PODAM_FACTORY.manufacturePojoWithFullData(
-                        TypeUtils.getClass(property.type()), TypeUtils.getTypeArguments(property.type()));
+                var randomValue = Instancio.create(property::type);
 
                 setter.invoke(builder, randomValue);
             }

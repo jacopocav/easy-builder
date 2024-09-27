@@ -19,9 +19,9 @@ dependencies {
 
     testImplementation(libs.assertj.core)
     testImplementation(libs.cute)
+    testImplementation(libs.instancio.junit)
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.mockito.junit.jupiter)
-    testImplementation(libs.podam)
 
     testRuntimeOnly(libs.junit.platform.launcher)
 }

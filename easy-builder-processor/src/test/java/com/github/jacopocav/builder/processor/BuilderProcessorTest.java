@@ -9,7 +9,6 @@ import static java.util.stream.Collectors.toUnmodifiableSet;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.*;
-import static org.mockito.Mockito.*;
 
 import com.github.jacopocav.builder.annotation.Builder;
 import com.github.jacopocav.builder.internal.option.BuilderOption;
@@ -32,6 +31,8 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
+import org.instancio.junit.Given;
+import org.instancio.junit.InstancioExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,13 +40,9 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.co.jemos.podam.api.PodamFactory;
-import uk.co.jemos.podam.api.PodamFactoryImpl;
 
-@ExtendWith({MockitoExtension.class})
+@ExtendWith({MockitoExtension.class, InstancioExtension.class})
 class BuilderProcessorTest {
-    private static final PodamFactory PODAM = new PodamFactoryImpl();
-
     @Mock
     private TypeElement annotation;
 
@@ -113,10 +110,7 @@ class BuilderProcessorTest {
     }
 
     @Test
-    void shouldPrintOptionArgumentsErrors() {
-        var errorMessage1 = PODAM.manufacturePojo(String.class);
-        var errorMessage2 = PODAM.manufacturePojo(String.class);
-
+    void shouldPrintOptionArgumentsErrors(@Given String errorMessage1, @Given String errorMessage2) {
         UnitTest<Element> unitTest = (processingEnv, element) -> {
             // given
             sut.init(processingEnv);
@@ -176,9 +170,7 @@ class BuilderProcessorTest {
     }
 
     @Test
-    void shouldPrintSingleError() {
-        var errorMessage = PODAM.manufacturePojo(String.class);
-
+    void shouldPrintSingleError(@Given String errorMessage) {
         UnitTest<Element> unitTest = (processingEnv, element) -> {
             // given
             sut.init(processingEnv);
@@ -232,10 +224,7 @@ class BuilderProcessorTest {
     }
 
     @Test
-    void shouldPrintAggregatedErrors() {
-        var firstErrorMessage = PODAM.manufacturePojo(String.class);
-        var secondErrorMessage = PODAM.manufacturePojo(String.class);
-
+    void shouldPrintAggregatedErrors(@Given String firstErrorMessage, @Given String secondErrorMessage) {
         UnitTest<Element> unitTest = (processingEnv, element) -> {
             // given
             sut.init(processingEnv);

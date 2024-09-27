@@ -2,12 +2,12 @@ package com.github.jacopocav.builder.compile;
 
 import com.github.jacopocav.builder.processor.BuilderProcessor;
 import com.github.jacopocav.builder.util.BuilderAssert;
-import com.github.jacopocav.builder.util.GenericType;
 import com.github.jacopocav.builder.util.SourceUtils;
 import io.toolisticon.cute.Cute;
 import io.toolisticon.cute.CuteApi.BlackBoxTestSourceFilesInterface;
 import java.lang.reflect.Type;
 import java.util.List;
+import org.instancio.TypeToken;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -18,7 +18,7 @@ class BuilderOptionsCompileTest {
     private static final String recordQualifiedName = packageName + "." + recordSimpleName;
     public static final String builderQualifiedName = recordQualifiedName + "Builder";
     private static final String errorPositionTarget = "record " + recordSimpleName;
-    private static final Type listOfIntegers = new GenericType<List<Integer>>() {}.getGenericType();
+    private static final Type listOfIntegers = new TypeToken<List<Integer>>() {}.get();
 
     private final BlackBoxTestSourceFilesInterface sut =
             Cute.blackBoxTest().given().processor(BuilderProcessor.class);
