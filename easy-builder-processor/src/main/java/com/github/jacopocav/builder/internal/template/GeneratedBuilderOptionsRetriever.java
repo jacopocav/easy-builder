@@ -5,18 +5,18 @@ import com.github.jacopocav.builder.internal.option.BuilderOption;
 import com.github.jacopocav.builder.internal.option.RawOptions;
 import java.util.List;
 
-public class MetadataAnnotationsGenerator {
+public class GeneratedBuilderOptionsRetriever {
     /**
-     * @return attribute values for all the {@link Metadata} annotations that must be added
-     * to the builder (one for every option in {@link BuilderOption})
+     * @return effective values for all options used to generate a specific builder
+     * @see com.github.jacopocav.builder.annotation.GeneratedBuilder
      */
-    public List<MetadataAnnotation> generate(RawOptions options) {
+    public List<GeneratedBuilderOption> get(RawOptions options) {
         return BuilderOption.all().stream()
-                .map(option -> makeMetadataAnnotation(option, options))
+                .map(option -> createOptionValue(option, options))
                 .toList();
     }
 
-    private MetadataAnnotation makeMetadataAnnotation(BuilderOption builderOption, RawOptions options) {
+    private GeneratedBuilderOption createOptionValue(BuilderOption builderOption, RawOptions options) {
         var value =
                 switch (builderOption) {
                     case CLASS_NAME -> quote(options.className());
@@ -28,7 +28,7 @@ public class MetadataAnnotationsGenerator {
                     case COPY_FACTORY_METHOD_NAME -> quote(options.copyFactoryMethodName());
                 };
 
-        return new MetadataAnnotation(builderOption.annotationName(), value);
+        return new GeneratedBuilderOption(builderOption.annotationName(), value);
     }
 
     private static String quote(String value) {

@@ -19,19 +19,19 @@ import java.util.function.Supplier;
 public class JteModelCreator {
     private final Clock clock;
     private final MembersGenerator membersGenerator;
-    private final MetadataAnnotationsGenerator metadataAnnotationsGenerator;
+    private final GeneratedBuilderOptionsRetriever generatedBuilderOptionsRetriever;
     private final Supplier<TypeRegistry> typeRegistryFactory;
     private final Templates templates;
 
     public JteModelCreator(
             Clock clock,
             MembersGenerator membersGenerator,
-            MetadataAnnotationsGenerator metadataAnnotationsGenerator,
+            GeneratedBuilderOptionsRetriever generatedBuilderOptionsRetriever,
             Supplier<TypeRegistry> typeRegistryFactory,
             Templates templates) {
         this.membersGenerator = membersGenerator;
         this.clock = clock;
-        this.metadataAnnotationsGenerator = metadataAnnotationsGenerator;
+        this.generatedBuilderOptionsRetriever = generatedBuilderOptionsRetriever;
         this.typeRegistryFactory = typeRegistryFactory;
         this.templates = templates;
     }
@@ -48,7 +48,7 @@ public class JteModelCreator {
         var creationTimestamp = OffsetDateTime.now(clock);
         var targetClassName = typeRegistry.getUsageName(builderData.targetClass());
         var enclosingClassName = typeRegistry.getUsageName(builderData.enclosingClass());
-        var metadataAnnotations = metadataAnnotationsGenerator.generate(options.raw());
+        var generatedBuilderOptions = generatedBuilderOptionsRetriever.get(options.raw());
         var className = builderName.simpleName();
         var members = membersGenerator.apply(builderData, typeRegistry);
         var staticCreatorMethod = creatorMethod.getKind() == METHOD
@@ -70,7 +70,7 @@ public class JteModelCreator {
                 typeRegistry,
                 processorName,
                 creationTimestamp,
-                metadataAnnotations,
+                generatedBuilderOptions,
                 className,
                 members,
                 options,

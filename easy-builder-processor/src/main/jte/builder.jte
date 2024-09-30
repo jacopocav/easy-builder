@@ -2,16 +2,16 @@
 @import java.time.OffsetDateTime
 @import com.github.jacopocav.builder.annotation.GeneratedBuilder
 @import com.github.jacopocav.builder.internal.option.InterpolatedOptions
+@import com.github.jacopocav.builder.internal.template.GeneratedBuilderOption
 @import com.github.jacopocav.builder.internal.type.TypeRegistry
 @import gg.jte.support.ForSupport
 @import com.github.jacopocav.builder.internal.template.Member
-@import com.github.jacopocav.builder.internal.template.MetadataAnnotation
 
 @param String packageName
 @param TypeRegistry typeRegistry
 @param String processorName
 @param OffsetDateTime creationTimestamp
-@param Collection<MetadataAnnotation> metadataAnnotations
+@param Collection<GeneratedBuilderOption> generatedBuilderOptions
 @param String className
 @param Collection<Member> members
 @param InterpolatedOptions options
@@ -32,11 +32,10 @@ package ${packageName};
 @${typeRegistry.getUsageName(javax.annotation.processing.Generated.class)}(
     value = "${processorName}",
     date = "${creationTimestamp.toString()}")
-!{var generatedBuilder = typeRegistry.getUsageName(GeneratedBuilder.class);}
-@${generatedBuilder}(
+@${typeRegistry.getUsageName(GeneratedBuilder.class)}(
     targetClass = ${targetClassName}.class,
-@for (var metadata: ForSupport.of(metadataAnnotations))
-    ${metadata.get().name()} = ${metadata.get().value()}@if(!metadata.isLast()),@endif
+@for (var option: ForSupport.of(generatedBuilderOptions))
+    ${option.get().name()} = ${option.get().value()}@if(!option.isLast()),@endif
 @endfor)
 <%-- builder class --%>
 public class ${className} {

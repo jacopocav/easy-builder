@@ -9,9 +9,9 @@ import com.github.jacopocav.builder.internal.generation.name.NameTemplateInterpo
 import com.github.jacopocav.builder.internal.option.OptionCompilerArgumentsValidator;
 import com.github.jacopocav.builder.internal.option.OptionsRepository;
 import com.github.jacopocav.builder.internal.template.BuilderTemplateRenderer;
+import com.github.jacopocav.builder.internal.template.GeneratedBuilderOptionsRetriever;
 import com.github.jacopocav.builder.internal.template.JteModelCreator;
 import com.github.jacopocav.builder.internal.template.MembersGenerator;
-import com.github.jacopocav.builder.internal.template.MetadataAnnotationsGenerator;
 import com.github.jacopocav.builder.internal.template.jte.StaticTemplates;
 import com.github.jacopocav.builder.internal.type.TypeRegistry;
 import com.github.jacopocav.builder.internal.validation.ElementValidator;
@@ -48,7 +48,7 @@ class ContextImpl implements Context {
                 new JteModelCreator(
                         Clock.systemDefaultZone(),
                         new MembersGenerator(new AccessorFinder(types, elements, targetClassRetriever)),
-                        new MetadataAnnotationsGenerator(),
+                        new GeneratedBuilderOptionsRetriever(),
                         TypeRegistry::new,
                         new StaticTemplates()));
         optionCompilerArgumentsValidator = new OptionCompilerArgumentsValidator(javaNameValidator);
