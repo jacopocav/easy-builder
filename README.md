@@ -14,9 +14,9 @@ as an annotation processor dependency.
 
 ### Maven
 
-**Note**: adding `easy-builder-processor` as a compile dependency also works, but it's not recommended and will
-unnecessarily pollute your classpath. Plus, implicit annotation processor discovery will be disabled by default
-in future Java versions (see: https://bugs.openjdk.org/browse/JDK-8314833).
+**Note**: adding `easy-builder-processor` as a `compile` or `provided`-scoped dependency also works, but it's not recommended and will
+unnecessarily pollute your classpath. Plus, implicit annotation processor discovery is disabled by default
+in Java 23 and later versions (see: https://bugs.openjdk.org/browse/JDK-8314833).
 
 ```xml
 
