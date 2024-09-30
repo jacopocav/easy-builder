@@ -1,7 +1,7 @@
 package com.github.jacopocav.builder.internal.finder;
 
+import static com.github.jacopocav.builder.internal.error.ProcessingException.processingException;
 import static com.github.jacopocav.builder.internal.finder.strategy.CreatorMethod.Error.NOT_APPLICABLE;
-import static com.github.jacopocav.builder.processing.error.ProcessingException.processingException;
 import static java.util.function.Predicate.isEqual;
 import static java.util.function.Predicate.not;
 

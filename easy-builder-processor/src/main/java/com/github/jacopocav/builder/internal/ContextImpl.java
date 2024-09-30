@@ -1,9 +1,13 @@
 package com.github.jacopocav.builder.internal;
 
+import com.github.jacopocav.builder.internal.error.printer.ProcessingExceptionPrinter;
 import com.github.jacopocav.builder.internal.finder.AccessorFinder;
 import com.github.jacopocav.builder.internal.finder.CreatorMethodFinder;
 import com.github.jacopocav.builder.internal.finder.CreatorMethodFinderImpl;
 import com.github.jacopocav.builder.internal.finder.strategy.CreatorMethodFinderStrategies;
+import com.github.jacopocav.builder.internal.generation.SingleElementJavaFileGenerator;
+import com.github.jacopocav.builder.internal.generation.name.GeneratedTypeNameGeneratorImpl;
+import com.github.jacopocav.builder.internal.generation.name.NameTemplateInterpolator;
 import com.github.jacopocav.builder.internal.option.OptionCompilerArgumentsValidator;
 import com.github.jacopocav.builder.internal.option.OptionCompilerArgumentsValidatorImpl;
 import com.github.jacopocav.builder.internal.option.OptionsRepository;
@@ -13,16 +17,12 @@ import com.github.jacopocav.builder.internal.template.JteModelCreator;
 import com.github.jacopocav.builder.internal.template.MembersGenerator;
 import com.github.jacopocav.builder.internal.template.MetadataAnnotationsGenerator;
 import com.github.jacopocav.builder.internal.template.jte.StaticTemplates;
-import com.github.jacopocav.builder.internal.validation.ValidationRules;
-import com.github.jacopocav.builder.processing.error.printer.ProcessingExceptionPrinter;
-import com.github.jacopocav.builder.processing.generation.SingleElementJavaFileGenerator;
-import com.github.jacopocav.builder.processing.generation.name.GeneratedTypeNameGeneratorImpl;
-import com.github.jacopocav.builder.processing.generation.name.NameTemplateInterpolator;
-import com.github.jacopocav.builder.processing.type.TypeRegistryFactory;
-import com.github.jacopocav.builder.processing.validation.ElementValidator;
-import com.github.jacopocav.builder.processing.validation.ElementValidatorImpl;
-import com.github.jacopocav.builder.processing.validation.JavaNameValidatorImpl;
-import com.github.jacopocav.builder.processing.writer.GeneratedJavaFileWriter;
+import com.github.jacopocav.builder.internal.type.TypeRegistryFactory;
+import com.github.jacopocav.builder.internal.validation.ElementValidator;
+import com.github.jacopocav.builder.internal.validation.ElementValidatorImpl;
+import com.github.jacopocav.builder.internal.validation.JavaNameValidatorImpl;
+import com.github.jacopocav.builder.internal.validation.rule.ValidationRules;
+import com.github.jacopocav.builder.internal.writer.GeneratedJavaFileWriter;
 import java.time.Clock;
 import javax.annotation.processing.ProcessingEnvironment;
 

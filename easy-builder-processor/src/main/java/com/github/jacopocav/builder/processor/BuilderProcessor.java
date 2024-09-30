@@ -1,6 +1,6 @@
 package com.github.jacopocav.builder.processor;
 
-import static com.github.jacopocav.builder.processing.error.ProcessingException.processingException;
+import static com.github.jacopocav.builder.internal.error.ProcessingException.processingException;
 import static java.util.Objects.requireNonNullElse;
 import static java.util.Objects.requireNonNullElseGet;
 import static java.util.stream.Collectors.toUnmodifiableMap;
@@ -8,13 +8,13 @@ import static java.util.stream.Collectors.toUnmodifiableSet;
 
 import com.github.jacopocav.builder.annotation.Builder;
 import com.github.jacopocav.builder.internal.Context;
+import com.github.jacopocav.builder.internal.error.AggregatedProcessingException;
+import com.github.jacopocav.builder.internal.error.ProcessingException;
+import com.github.jacopocav.builder.internal.error.printer.ProcessingExceptionPrinter;
+import com.github.jacopocav.builder.internal.generation.SingleElementJavaFileGenerator;
 import com.github.jacopocav.builder.internal.option.BuilderOption;
 import com.github.jacopocav.builder.internal.option.OptionCompilerArgumentsValidator;
-import com.github.jacopocav.builder.processing.error.AggregatedProcessingException;
-import com.github.jacopocav.builder.processing.error.ProcessingException;
-import com.github.jacopocav.builder.processing.error.printer.ProcessingExceptionPrinter;
-import com.github.jacopocav.builder.processing.generation.SingleElementJavaFileGenerator;
-import com.github.jacopocav.builder.processing.writer.GeneratedJavaFileWriter;
+import com.github.jacopocav.builder.internal.writer.GeneratedJavaFileWriter;
 import java.io.UncheckedIOException;
 import java.util.Map;
 import java.util.Map.Entry;

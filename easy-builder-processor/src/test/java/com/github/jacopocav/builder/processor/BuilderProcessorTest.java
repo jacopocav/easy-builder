@@ -1,7 +1,7 @@
 package com.github.jacopocav.builder.processor;
 
-import static com.github.jacopocav.builder.processing.error.AggregatedProcessingException.processingExceptions;
-import static com.github.jacopocav.builder.processing.error.ProcessingException.processingException;
+import static com.github.jacopocav.builder.internal.error.AggregatedProcessingException.processingExceptions;
+import static com.github.jacopocav.builder.internal.error.ProcessingException.processingException;
 import static io.toolisticon.cute.Cute.unitTest;
 import static java.util.Objects.requireNonNullElse;
 import static java.util.stream.Collectors.toUnmodifiableMap;
@@ -11,13 +11,13 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.*;
 
 import com.github.jacopocav.builder.annotation.Builder;
+import com.github.jacopocav.builder.internal.error.ProcessingException;
+import com.github.jacopocav.builder.internal.error.printer.ProcessingExceptionPrinter;
+import com.github.jacopocav.builder.internal.generation.GeneratedJavaFile;
+import com.github.jacopocav.builder.internal.generation.SingleElementJavaFileGenerator;
 import com.github.jacopocav.builder.internal.option.BuilderOption;
 import com.github.jacopocav.builder.internal.option.OptionCompilerArgumentsValidator;
-import com.github.jacopocav.builder.processing.error.ProcessingException;
-import com.github.jacopocav.builder.processing.error.printer.ProcessingExceptionPrinter;
-import com.github.jacopocav.builder.processing.generation.GeneratedJavaFile;
-import com.github.jacopocav.builder.processing.generation.SingleElementJavaFileGenerator;
-import com.github.jacopocav.builder.processing.writer.GeneratedJavaFileWriter;
+import com.github.jacopocav.builder.internal.writer.GeneratedJavaFileWriter;
 import com.github.jacopocav.builder.util.mock.ContextMock;
 import io.toolisticon.cute.PassIn;
 import io.toolisticon.cute.UnitTest;

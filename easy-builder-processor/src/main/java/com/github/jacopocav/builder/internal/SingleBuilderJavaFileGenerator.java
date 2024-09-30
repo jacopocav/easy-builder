@@ -1,10 +1,10 @@
 package com.github.jacopocav.builder.internal;
 
 import com.github.jacopocav.builder.internal.finder.CreatorMethodFinder;
+import com.github.jacopocav.builder.internal.generation.GeneratedJavaFile;
+import com.github.jacopocav.builder.internal.generation.SingleElementJavaFileGenerator;
 import com.github.jacopocav.builder.internal.option.OptionsRepository;
-import com.github.jacopocav.builder.processing.generation.GeneratedJavaFile;
-import com.github.jacopocav.builder.processing.generation.SingleElementJavaFileGenerator;
-import com.github.jacopocav.builder.processing.validation.ElementValidator;
+import com.github.jacopocav.builder.internal.validation.ElementValidator;
 import javax.lang.model.element.Element;
 
 class SingleBuilderJavaFileGenerator implements SingleElementJavaFileGenerator {

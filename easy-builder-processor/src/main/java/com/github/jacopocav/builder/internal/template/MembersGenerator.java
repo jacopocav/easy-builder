@@ -1,19 +1,19 @@
 package com.github.jacopocav.builder.internal.template;
 
 import static com.github.jacopocav.builder.annotation.Builder.CopyFactoryMethodGeneration.*;
-import static com.github.jacopocav.builder.processing.error.AggregatedProcessingException.processingExceptions;
-import static com.github.jacopocav.builder.processing.error.ProcessingException.processingException;
+import static com.github.jacopocav.builder.internal.error.AggregatedProcessingException.processingExceptions;
+import static com.github.jacopocav.builder.internal.error.ProcessingException.processingException;
 import static java.util.stream.Collectors.partitioningBy;
 import static javax.lang.model.element.ElementKind.METHOD;
 
+import com.github.jacopocav.builder.internal.error.ProcessingException;
 import com.github.jacopocav.builder.internal.finder.Accessor.Found;
 import com.github.jacopocav.builder.internal.finder.Accessor.NotFound;
 import com.github.jacopocav.builder.internal.finder.AccessorFinder;
 import com.github.jacopocav.builder.internal.option.BuilderOption;
 import com.github.jacopocav.builder.internal.option.InterpolatedOptions;
+import com.github.jacopocav.builder.internal.type.TypeRegistry;
 import com.github.jacopocav.builder.internal.util.StringUtils;
-import com.github.jacopocav.builder.processing.error.ProcessingException;
-import com.github.jacopocav.builder.processing.type.TypeRegistry;
 import java.util.List;
 import javax.lang.model.element.VariableElement;
 

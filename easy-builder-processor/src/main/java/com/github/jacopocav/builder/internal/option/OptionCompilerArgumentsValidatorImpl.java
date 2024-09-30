@@ -1,9 +1,9 @@
 package com.github.jacopocav.builder.internal.option;
 
-import static com.github.jacopocav.builder.processing.error.ProcessingException.processingException;
+import static com.github.jacopocav.builder.internal.error.ProcessingException.processingException;
 
-import com.github.jacopocav.builder.processing.error.ProcessingException;
-import com.github.jacopocav.builder.processing.validation.JavaNameValidator;
+import com.github.jacopocav.builder.internal.error.ProcessingException;
+import com.github.jacopocav.builder.internal.validation.JavaNameValidator;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;

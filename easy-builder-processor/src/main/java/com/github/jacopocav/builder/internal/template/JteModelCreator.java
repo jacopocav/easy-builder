@@ -5,7 +5,7 @@ import static javax.lang.model.element.ElementKind.METHOD;
 import com.github.jacopocav.builder.annotation.Builder.CopyFactoryMethodGeneration;
 import com.github.jacopocav.builder.annotation.GeneratedBuilder;
 import com.github.jacopocav.builder.internal.template.jte.Templates;
-import com.github.jacopocav.builder.processing.type.TypeRegistryFactory;
+import com.github.jacopocav.builder.internal.type.TypeRegistryFactory;
 import com.github.jacopocav.builder.processor.BuilderProcessor;
 import gg.jte.models.runtime.JteModel;
 import java.time.Clock;

@@ -2,7 +2,7 @@
 @import java.time.OffsetDateTime
 @import com.github.jacopocav.builder.annotation.GeneratedBuilder
 @import com.github.jacopocav.builder.internal.option.InterpolatedOptions
-@import com.github.jacopocav.builder.processing.type.TypeRegistry
+@import com.github.jacopocav.builder.internal.type.TypeRegistry
 @import gg.jte.support.ForSupport
 @import com.github.jacopocav.builder.internal.template.Member
 @import com.github.jacopocav.builder.internal.template.MetadataAnnotation

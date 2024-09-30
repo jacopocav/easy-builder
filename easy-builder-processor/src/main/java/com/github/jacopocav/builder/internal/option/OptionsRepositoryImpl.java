@@ -4,7 +4,7 @@ import static java.util.stream.Collectors.toMap;
 
 import com.github.jacopocav.builder.annotation.Builder;
 import com.github.jacopocav.builder.annotation.Builder.CopyFactoryMethodGeneration;
-import com.github.jacopocav.builder.processing.generation.name.NameTemplateInterpolator;
+import com.github.jacopocav.builder.internal.generation.name.NameTemplateInterpolator;
 import java.util.Map;
 import java.util.Optional;
 import javax.lang.model.element.Element;
