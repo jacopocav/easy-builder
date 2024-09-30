@@ -88,7 +88,7 @@ public class MyRecordBuilder {
     }
 
     public static MyRecordBuilder from(MyRecord other) {
-        return create().withMyString(other.myString()).withMyInt(other.myInt());
+        return create().myString(other.myString()).myInt(other.myInt());
     }
 
     public MyRecordBuilder myString(String myString) {
