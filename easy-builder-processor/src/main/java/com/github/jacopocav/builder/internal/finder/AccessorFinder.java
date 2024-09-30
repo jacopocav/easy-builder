@@ -6,7 +6,7 @@ import static javax.lang.model.type.TypeKind.NONE;
 import static javax.lang.model.util.ElementFilter.fieldsIn;
 import static javax.lang.model.util.ElementFilter.methodsIn;
 
-import com.github.jacopocav.builder.internal.TargetClassRetriever;
+import com.github.jacopocav.builder.internal.SourceClassRetriever;
 import com.github.jacopocav.builder.internal.util.StringUtils;
 import java.util.Optional;
 import java.util.function.Function;
@@ -17,12 +17,12 @@ import javax.lang.model.util.Types;
 public class AccessorFinder implements Function<VariableElement, Accessor> {
     private final Types types;
     private final Elements elements;
-    private final TargetClassRetriever targetClassRetriever;
+    private final SourceClassRetriever sourceClassRetriever;
 
-    public AccessorFinder(Types types, Elements elements, TargetClassRetriever targetClassRetriever) {
+    public AccessorFinder(Types types, Elements elements, SourceClassRetriever sourceClassRetriever) {
         this.types = types;
         this.elements = elements;
-        this.targetClassRetriever = targetClassRetriever;
+        this.sourceClassRetriever = sourceClassRetriever;
     }
 
     /**
@@ -35,7 +35,7 @@ public class AccessorFinder implements Function<VariableElement, Accessor> {
     @Override
     public Accessor apply(VariableElement argument) {
         var callerPackage = elements.getPackageOf(argument).getQualifiedName();
-        var targetClass = targetClassRetriever.getElement(argument);
+        var targetClass = sourceClassRetriever.getElement(argument);
 
         return findAccessorRecursively(targetClass, argument, callerPackage)
                 .orElseGet(() -> new Accessor.NotFound(argument));

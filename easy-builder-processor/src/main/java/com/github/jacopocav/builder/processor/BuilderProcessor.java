@@ -10,11 +10,7 @@ import com.github.jacopocav.builder.annotation.Builder;
 import com.github.jacopocav.builder.internal.Context;
 import com.github.jacopocav.builder.internal.error.AggregatedProcessingException;
 import com.github.jacopocav.builder.internal.error.ProcessingException;
-import com.github.jacopocav.builder.internal.error.printer.ProcessingExceptionPrinter;
-import com.github.jacopocav.builder.internal.generation.SingleElementJavaFileGenerator;
 import com.github.jacopocav.builder.internal.option.BuilderOption;
-import com.github.jacopocav.builder.internal.option.OptionCompilerArgumentsValidator;
-import com.github.jacopocav.builder.internal.writer.GeneratedJavaFileWriter;
 import java.io.UncheckedIOException;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -31,10 +27,6 @@ import javax.lang.model.element.TypeElement;
  */
 public class BuilderProcessor extends AbstractProcessor {
     private Context context;
-    private SingleElementJavaFileGenerator singleElementJavaFileGenerator;
-    private OptionCompilerArgumentsValidator optionCompilerArgumentsValidator;
-    private GeneratedJavaFileWriter generatedJavaFileWriter;
-    private ProcessingExceptionPrinter processingExceptionPrinter;
     private Map<String, String> nonNullArguments;
 
     private boolean argsValidated = false;
@@ -66,10 +58,6 @@ public class BuilderProcessor extends AbstractProcessor {
         super.init(processingEnv);
         initNonNullOptions(processingEnv);
         context = requireNonNullElseGet(context, () -> Context.createDefault(processingEnv));
-        singleElementJavaFileGenerator = context.singleBuilderJavaFileGenerator();
-        optionCompilerArgumentsValidator = context.optionCompilerArgumentsValidator();
-        generatedJavaFileWriter = context.generatedJavaFileWriter();
-        processingExceptionPrinter = context.processingExceptionPrinter();
     }
 
     @Override
@@ -96,23 +84,24 @@ public class BuilderProcessor extends AbstractProcessor {
             return true;
         }
 
-        var errors = optionCompilerArgumentsValidator.validate(nonNullArguments);
+        var errors = context.optionCompilerArgumentsValidator().validate(nonNullArguments);
         argsValidated = true;
 
-        errors.forEach(processingExceptionPrinter::print);
+        errors.forEach(context.processingExceptionPrinter()::print);
         return errors.isEmpty();
     }
 
     private void processElement(Element element) {
+        var exceptionPrinter = context.processingExceptionPrinter();
         try {
-            var generatedJavaFile = singleElementJavaFileGenerator.generate(element);
-            generatedJavaFileWriter.write(generatedJavaFile);
+            var generatedJavaFile = context.builderGenerator().generate(element);
+            context.generatedJavaFileWriter().write(generatedJavaFile);
         } catch (ProcessingException e) {
-            processingExceptionPrinter.print(e);
+            exceptionPrinter.print(e);
         } catch (AggregatedProcessingException e) {
-            processingExceptionPrinter.print(e);
+            exceptionPrinter.print(e);
         } catch (UncheckedIOException e) {
-            processingExceptionPrinter.print(processingException(
+            exceptionPrinter.print(processingException(
                     element,
                     "I/O error occurred while writing builder source: %s",
                     e.getCause().getMessage()));

@@ -9,7 +9,7 @@ public class IterableUtils {
         return list.get(0);
     }
 
-    public static <T> T getFirst(Iterable<T> set) {
-        return set.iterator().next();
+    public static <T> T getFirst(Iterable<T> iterable) {
+        return iterable.iterator().next();
     }
 }

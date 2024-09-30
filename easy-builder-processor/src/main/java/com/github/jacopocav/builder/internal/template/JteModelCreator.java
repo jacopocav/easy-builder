@@ -5,12 +5,13 @@ import static javax.lang.model.element.ElementKind.METHOD;
 import com.github.jacopocav.builder.annotation.Builder.CopyFactoryMethodGeneration;
 import com.github.jacopocav.builder.annotation.GeneratedBuilder;
 import com.github.jacopocav.builder.internal.template.jte.Templates;
-import com.github.jacopocav.builder.internal.type.TypeRegistryFactory;
+import com.github.jacopocav.builder.internal.type.TypeRegistry;
 import com.github.jacopocav.builder.processor.BuilderProcessor;
 import gg.jte.models.runtime.JteModel;
 import java.time.Clock;
 import java.time.OffsetDateTime;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 /**
  * Creates a {@link JteModel} of the builder class, ready to be rendered with {@link JteModel#render()}
@@ -19,14 +20,14 @@ public class JteModelCreator {
     private final Clock clock;
     private final MembersGenerator membersGenerator;
     private final MetadataAnnotationsGenerator metadataAnnotationsGenerator;
-    private final TypeRegistryFactory typeRegistryFactory;
+    private final Supplier<TypeRegistry> typeRegistryFactory;
     private final Templates templates;
 
     public JteModelCreator(
             Clock clock,
             MembersGenerator membersGenerator,
             MetadataAnnotationsGenerator metadataAnnotationsGenerator,
-            TypeRegistryFactory typeRegistryFactory,
+            Supplier<TypeRegistry> typeRegistryFactory,
             Templates templates) {
         this.membersGenerator = membersGenerator;
         this.clock = clock;
@@ -40,7 +41,7 @@ public class JteModelCreator {
         var creatorMethod = builderData.creatorMethod();
         var options = builderData.options();
 
-        var typeRegistry = typeRegistryFactory.create();
+        var typeRegistry = typeRegistryFactory.get();
 
         var packageName = builderName.enclosingPackage().getQualifiedName().toString();
         var processorName = BuilderProcessor.class.getName();

@@ -1,7 +1,6 @@
 package com.github.jacopocav.builder.internal;
 
 import com.github.jacopocav.builder.internal.error.printer.ProcessingExceptionPrinter;
-import com.github.jacopocav.builder.internal.generation.SingleElementJavaFileGenerator;
 import com.github.jacopocav.builder.internal.option.OptionCompilerArgumentsValidator;
 import com.github.jacopocav.builder.internal.writer.GeneratedJavaFileWriter;
 import com.github.jacopocav.builder.processor.BuilderProcessor;
@@ -12,7 +11,7 @@ import javax.annotation.processing.ProcessingEnvironment;
  */
 public interface Context {
 
-    SingleElementJavaFileGenerator singleBuilderJavaFileGenerator();
+    BuilderGenerator builderGenerator();
 
     OptionCompilerArgumentsValidator optionCompilerArgumentsValidator();
 

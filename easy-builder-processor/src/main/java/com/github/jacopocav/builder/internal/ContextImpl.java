@@ -3,24 +3,19 @@ package com.github.jacopocav.builder.internal;
 import com.github.jacopocav.builder.internal.error.printer.ProcessingExceptionPrinter;
 import com.github.jacopocav.builder.internal.finder.AccessorFinder;
 import com.github.jacopocav.builder.internal.finder.CreatorMethodFinder;
-import com.github.jacopocav.builder.internal.finder.CreatorMethodFinderImpl;
 import com.github.jacopocav.builder.internal.finder.strategy.CreatorMethodFinderStrategies;
-import com.github.jacopocav.builder.internal.generation.SingleElementJavaFileGenerator;
-import com.github.jacopocav.builder.internal.generation.name.GeneratedTypeNameGeneratorImpl;
+import com.github.jacopocav.builder.internal.generation.name.GeneratedTypeNameGenerator;
 import com.github.jacopocav.builder.internal.generation.name.NameTemplateInterpolator;
 import com.github.jacopocav.builder.internal.option.OptionCompilerArgumentsValidator;
-import com.github.jacopocav.builder.internal.option.OptionCompilerArgumentsValidatorImpl;
 import com.github.jacopocav.builder.internal.option.OptionsRepository;
-import com.github.jacopocav.builder.internal.option.OptionsRepositoryImpl;
-import com.github.jacopocav.builder.internal.template.BuilderGeneratorJte;
+import com.github.jacopocav.builder.internal.template.BuilderTemplateRenderer;
 import com.github.jacopocav.builder.internal.template.JteModelCreator;
 import com.github.jacopocav.builder.internal.template.MembersGenerator;
 import com.github.jacopocav.builder.internal.template.MetadataAnnotationsGenerator;
 import com.github.jacopocav.builder.internal.template.jte.StaticTemplates;
-import com.github.jacopocav.builder.internal.type.TypeRegistryFactory;
+import com.github.jacopocav.builder.internal.type.TypeRegistry;
 import com.github.jacopocav.builder.internal.validation.ElementValidator;
-import com.github.jacopocav.builder.internal.validation.ElementValidatorImpl;
-import com.github.jacopocav.builder.internal.validation.JavaNameValidatorImpl;
+import com.github.jacopocav.builder.internal.validation.JavaNameValidator;
 import com.github.jacopocav.builder.internal.validation.rule.ValidationRules;
 import com.github.jacopocav.builder.internal.writer.GeneratedJavaFileWriter;
 import java.time.Clock;
@@ -31,40 +26,42 @@ class ContextImpl implements Context {
     private final CreatorMethodFinder creatorMethodFinder;
     private final OptionCompilerArgumentsValidator optionCompilerArgumentsValidator;
     private final ProcessingExceptionPrinter processingExceptionPrinter;
-    private final BuilderGenerator builderGenerator;
+    private final BuilderTemplateRenderer builderTemplateRenderer;
     private final GeneratedJavaFileWriter generatedJavaFileWriter;
     private final OptionsRepository optionsRepository;
+    private final BuilderGenerator builderGenerator;
 
     ContextImpl(ProcessingEnvironment processingEnvironment) {
         var nameTemplateInterpolator = new NameTemplateInterpolator();
-        var javaNameValidator = new JavaNameValidatorImpl(nameTemplateInterpolator);
+        var javaNameValidator = new JavaNameValidator(nameTemplateInterpolator);
         var types = processingEnvironment.getTypeUtils();
         var elements = processingEnvironment.getElementUtils();
-        var targetClassRetriever = new TargetClassRetriever(types);
+        var targetClassRetriever = new SourceClassRetriever(types);
 
-        creatorMethodFinder = new CreatorMethodFinderImpl(CreatorMethodFinderStrategies.getAll());
-        elementValidator = new ElementValidatorImpl(ValidationRules.getAll(javaNameValidator));
-        optionsRepository = new OptionsRepositoryImpl(processingEnvironment.getOptions(), nameTemplateInterpolator);
-        builderGenerator = new BuilderGeneratorJte(
-                new TargetClassRetriever(types),
+        creatorMethodFinder = new CreatorMethodFinder(CreatorMethodFinderStrategies.getAll());
+        elementValidator = new ElementValidator(ValidationRules.getAll(javaNameValidator));
+        optionsRepository = new OptionsRepository(processingEnvironment.getOptions(), nameTemplateInterpolator);
+        builderTemplateRenderer = new BuilderTemplateRenderer(
+                new SourceClassRetriever(types),
                 optionsRepository,
-                new GeneratedTypeNameGeneratorImpl(elements),
+                new GeneratedTypeNameGenerator(elements),
                 new JteModelCreator(
                         Clock.systemDefaultZone(),
                         new MembersGenerator(new AccessorFinder(types, elements, targetClassRetriever)),
                         new MetadataAnnotationsGenerator(),
-                        new TypeRegistryFactory(),
+                        TypeRegistry::new,
                         new StaticTemplates()));
-        optionCompilerArgumentsValidator = new OptionCompilerArgumentsValidatorImpl(javaNameValidator);
+        optionCompilerArgumentsValidator = new OptionCompilerArgumentsValidator(javaNameValidator);
         processingExceptionPrinter = new ProcessingExceptionPrinter(
                 "@Builder processing error: ", processingEnvironment.getMessager(), false);
         generatedJavaFileWriter = new GeneratedJavaFileWriter(processingEnvironment.getFiler());
+        builderGenerator =
+                new BuilderGenerator(elementValidator, creatorMethodFinder, optionsRepository, builderTemplateRenderer);
     }
 
     @Override
-    public SingleElementJavaFileGenerator singleBuilderJavaFileGenerator() {
-        return new SingleBuilderJavaFileGenerator(
-                elementValidator, creatorMethodFinder, optionsRepository, builderGenerator);
+    public BuilderGenerator builderGenerator() {
+        return builderGenerator;
     }
 
     @Override

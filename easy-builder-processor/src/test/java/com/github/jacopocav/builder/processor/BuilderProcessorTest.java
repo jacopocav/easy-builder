@@ -11,10 +11,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.*;
 
 import com.github.jacopocav.builder.annotation.Builder;
+import com.github.jacopocav.builder.internal.BuilderGenerator;
 import com.github.jacopocav.builder.internal.error.ProcessingException;
 import com.github.jacopocav.builder.internal.error.printer.ProcessingExceptionPrinter;
 import com.github.jacopocav.builder.internal.generation.GeneratedJavaFile;
-import com.github.jacopocav.builder.internal.generation.SingleElementJavaFileGenerator;
 import com.github.jacopocav.builder.internal.option.BuilderOption;
 import com.github.jacopocav.builder.internal.option.OptionCompilerArgumentsValidator;
 import com.github.jacopocav.builder.internal.writer.GeneratedJavaFileWriter;
@@ -50,7 +50,7 @@ class BuilderProcessorTest {
     private RoundEnvironment roundEnvironment;
 
     @Mock
-    private SingleElementJavaFileGenerator singleElementFileGenerator;
+    private BuilderGenerator builderGenerator;
 
     @Mock
     private OptionCompilerArgumentsValidator optionCompilerArgumentsValidator;
@@ -66,7 +66,7 @@ class BuilderProcessorTest {
     @BeforeEach
     void setUp() {
         sut = new BuilderProcessor(new ContextMock(
-                singleElementFileGenerator,
+                builderGenerator,
                 optionCompilerArgumentsValidator,
                 generatedJavaFileWriter,
                 processingExceptionPrinter));
@@ -180,7 +180,7 @@ class BuilderProcessorTest {
             given(optionCompilerArgumentsValidator.validate(Map.of())).willReturn(Set.of());
             willReturn(Set.of(element)).given(roundEnvironment).getElementsAnnotatedWith(annotation);
 
-            given(singleElementFileGenerator.generate(element)).willThrow(error);
+            given(builderGenerator.generate(element)).willThrow(error);
 
             will(invocation -> {
                         processingEnv.getMessager().printError(errorMessage);
@@ -196,13 +196,10 @@ class BuilderProcessorTest {
             assertThat(result).isTrue();
 
             var inOrder = inOrder(
-                    roundEnvironment,
-                    optionCompilerArgumentsValidator,
-                    singleElementFileGenerator,
-                    processingExceptionPrinter);
+                    roundEnvironment, optionCompilerArgumentsValidator, builderGenerator, processingExceptionPrinter);
             inOrder.verify(optionCompilerArgumentsValidator).validate(Map.of());
             inOrder.verify(roundEnvironment).getElementsAnnotatedWith(annotation);
-            inOrder.verify(singleElementFileGenerator).generate(element);
+            inOrder.verify(builderGenerator).generate(element);
             inOrder.verify(processingExceptionPrinter).print(error);
             inOrder.verifyNoMoreInteractions();
 
@@ -235,7 +232,7 @@ class BuilderProcessorTest {
             given(optionCompilerArgumentsValidator.validate(Map.of())).willReturn(Set.of());
             willReturn(Set.of(element)).given(roundEnvironment).getElementsAnnotatedWith(annotation);
 
-            given(singleElementFileGenerator.generate(element)).willThrow(aggregatedError);
+            given(builderGenerator.generate(element)).willThrow(aggregatedError);
 
             will(invocation -> {
                         processingEnv.getMessager().printError(firstErrorMessage, element);
@@ -252,13 +249,10 @@ class BuilderProcessorTest {
             assertThat(result).isTrue();
 
             var inOrder = inOrder(
-                    roundEnvironment,
-                    optionCompilerArgumentsValidator,
-                    singleElementFileGenerator,
-                    processingExceptionPrinter);
+                    roundEnvironment, optionCompilerArgumentsValidator, builderGenerator, processingExceptionPrinter);
             inOrder.verify(optionCompilerArgumentsValidator).validate(Map.of());
             inOrder.verify(roundEnvironment).getElementsAnnotatedWith(annotation);
-            inOrder.verify(singleElementFileGenerator).generate(element);
+            inOrder.verify(builderGenerator).generate(element);
             inOrder.verify(processingExceptionPrinter).print(aggregatedError);
             inOrder.verifyNoMoreInteractions();
 
@@ -297,7 +291,7 @@ class BuilderProcessorTest {
             given(optionCompilerArgumentsValidator.validate(Map.of())).willReturn(Set.of());
             willReturn(Set.of(element)).given(roundEnvironment).getElementsAnnotatedWith(annotation);
 
-            given(singleElementFileGenerator.generate(element)).willReturn(javaFile);
+            given(builderGenerator.generate(element)).willReturn(javaFile);
             willThrow(new UncheckedIOException(new IOException(message)))
                     .given(generatedJavaFileWriter)
                     .write(javaFile);
@@ -318,12 +312,12 @@ class BuilderProcessorTest {
             var inOrder = inOrder(
                     roundEnvironment,
                     optionCompilerArgumentsValidator,
-                    singleElementFileGenerator,
+                    builderGenerator,
                     processingExceptionPrinter,
                     generatedJavaFileWriter);
             inOrder.verify(optionCompilerArgumentsValidator).validate(Map.of());
             inOrder.verify(roundEnvironment).getElementsAnnotatedWith(annotation);
-            inOrder.verify(singleElementFileGenerator).generate(element);
+            inOrder.verify(builderGenerator).generate(element);
             inOrder.verify(generatedJavaFileWriter).write(javaFile);
             inOrder.verify(processingExceptionPrinter).print(processingExceptionCaptor.capture());
             inOrder.verifyNoMoreInteractions();
@@ -363,7 +357,7 @@ class BuilderProcessorTest {
             given(optionCompilerArgumentsValidator.validate(Map.of())).willReturn(Set.of());
             willReturn(Set.of(element)).given(roundEnvironment).getElementsAnnotatedWith(annotation);
 
-            given(singleElementFileGenerator.generate(element)).willReturn(javaFile);
+            given(builderGenerator.generate(element)).willReturn(javaFile);
 
             // when
             var result = sut.process(Set.of(annotation), roundEnvironment);
@@ -371,10 +365,10 @@ class BuilderProcessorTest {
             // then
             assertThat(result).isTrue();
 
-            var inOrder = inOrder(roundEnvironment, optionCompilerArgumentsValidator, singleElementFileGenerator);
+            var inOrder = inOrder(roundEnvironment, optionCompilerArgumentsValidator, builderGenerator);
             inOrder.verify(optionCompilerArgumentsValidator).validate(Map.of());
             inOrder.verify(roundEnvironment).getElementsAnnotatedWith(annotation);
-            inOrder.verify(singleElementFileGenerator).generate(element);
+            inOrder.verify(builderGenerator).generate(element);
             inOrder.verifyNoMoreInteractions();
 
             verifyNoInteractions(annotation, processingExceptionPrinter);

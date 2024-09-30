@@ -10,10 +10,10 @@ import javax.lang.model.util.Types;
  * Determines the type of object that will be constructed by the builder, starting from
  * an {@code element} annotated with {@link com.github.jacopocav.builder.annotation.Builder @Builder}.
  */
-public class TargetClassRetriever {
+public class SourceClassRetriever {
     private final Types types;
 
-    TargetClassRetriever(Types types) {
+    SourceClassRetriever(Types types) {
         this.types = types;
     }
 
