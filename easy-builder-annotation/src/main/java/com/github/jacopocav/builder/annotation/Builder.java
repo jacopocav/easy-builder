@@ -1,11 +1,14 @@
 package com.github.jacopocav.builder.annotation;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.SOURCE;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.SOURCE;
+
+/**
+ * Generates a builder class at compile-time for the annotated record/class/constructor/static method.
+ */
 @Retention(SOURCE)
 @Target({TYPE, CONSTRUCTOR, METHOD})
 public @interface Builder {
@@ -19,28 +22,27 @@ public @interface Builder {
     String LOWER_CASE_TARGET_CLASS_NAME = "{lowerCaseTargetClassName}";
 
     /**
-     * Name of the generated builder class.
-     * Defaults to the {@value Defaults#CLASS_NAME}.
+     * Name of the generated builder class. Defaults to the {@value Defaults#CLASS_NAME}.
      * <p>
-     * Note that the builder will always be generated in the same package as its
+     * Note that the builder will always be generated in the same package as the element annotated with
+     * {@code @Builder}.
      */
     String className() default Defaults.CLASS_NAME;
 
     /**
-     * Name of the factory method that will return a new builder instance.
-     * Defaults to {@value Defaults#FACTORY_METHOD_NAME}.
+     * Name of the factory method that will return a new builder instance. Defaults to
+     * {@value Defaults#FACTORY_METHOD_NAME}.
      */
     String factoryMethodName() default Defaults.FACTORY_METHOD_NAME;
 
     /**
-     * Prefix that will be used on builder setters (can be empty).
-     * Defaults to {@value Defaults#SETTER_PREFIX}.
+     * Prefix that will be used on builder setters (can be empty). Defaults to {@value Defaults#SETTER_PREFIX}.
      */
     String setterPrefix() default Defaults.SETTER_PREFIX;
 
     /**
-     * Name of the method that builds an instance of the source class from the builder.
-     * Defaults to {@value Defaults#BUILD_METHOD_NAME}.
+     * Name of the method that builds an instance of the source class from the builder. Defaults to
+     * {@value Defaults#BUILD_METHOD_NAME}.
      */
     String buildMethodName() default Defaults.BUILD_METHOD_NAME;
 
@@ -48,17 +50,17 @@ public @interface Builder {
      * Generates a static factory method that creates a new instance of the builder by copying all properties a given
      * source class instance given as argument.
      * <p>
-     * The generation of this method is optional, as it requires that all source class properties to be <em>accessible</em>
-     * from the builder. A property is accessible if its getter or field can be read from the builder class without
-     * using reflection.
+     * The generation of this method is optional, as it requires that all source class properties to be
+     * <em>accessible</em> from the builder. A property is accessible if its getter or field can be read from the
+     * builder class without using reflection.
      * <p>
      * Defaults to {@link CopyFactoryMethodGeneration#ENABLED}.
      */
     CopyFactoryMethodGeneration copyFactoryMethod() default CopyFactoryMethodGeneration.ENABLED;
 
     /**
-     * Name of the static copy factory method, if enabled with {@link #copyFactoryMethod()}.
-     * Defaults to {@value Defaults#COPY_FACTORY_METHOD_NAME}.
+     * Name of the static copy factory method, if enabled with {@link #copyFactoryMethod()}. Defaults to
+     * {@value Defaults#COPY_FACTORY_METHOD_NAME}.
      */
     String copyFactoryMethodName() default Defaults.COPY_FACTORY_METHOD_NAME;
 
@@ -68,13 +70,13 @@ public @interface Builder {
          */
         DISABLED,
         /**
-         * A copy factory method will be generated, and a compilation will fail if some property of the
-         * source class is not accessible (i.e. has no accessible getter or field).
+         * A copy factory method will be generated, and a compilation will fail if some property of the source class is
+         * not accessible (i.e. has no accessible getter or field).
          */
         ENABLED,
         /**
-         * A copy factory method will be generated only if all properties of the source class are accessible
-         * (i.e. its getter or field are accessible without using reflection).
+         * A copy factory method will be generated only if all properties of the source class are accessible (i.e. its
+         * getter or field are accessible without using reflection).
          * <p>A compiler warning will be printed in case one or more properties are not accessible.
          */
         DYNAMIC
