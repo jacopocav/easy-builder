@@ -121,6 +121,7 @@ public class BuilderAssert extends AbstractRichClassAssert<BuilderAssert> {
      */
     public BuilderAssert isWellFormed() {
         isPublic();
+        isFinal();
         hasAnnotation(GeneratedBuilder.class);
         assertGeneratedBuilderAnnotationMatchOptions();
         hasDeclaredConstructor(PRIVATE);

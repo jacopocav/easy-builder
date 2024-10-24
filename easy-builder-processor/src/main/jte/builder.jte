@@ -38,7 +38,7 @@ package ${packageName};
     ${option.get().name()} = ${option.get().value()}@if(!option.isLast()),@endif
 @endfor)
 <%-- builder class --%>
-public class ${className} {
+public final class ${className} {
     <%-- private fields --%>
     @for(var member: members)
         private ${member.type()} ${member.name()};

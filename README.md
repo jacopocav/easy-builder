@@ -77,7 +77,7 @@ will generate this builder class during compilation:
 ```java
 package my.pkg;
 
-public class MyRecordBuilder {
+public final class MyRecordBuilder {
     private String myString;
     private int myInt;
 
